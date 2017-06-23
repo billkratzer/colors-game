@@ -10,6 +10,8 @@ var loadState = {
     progressBar.anchor.setTo(0.5, 0.5);
     game.load.setPreloadSprite(progressBar);
 
+    game.load.image('colors_logo', 'assets/colors_logo.png');
+
     game.load.image('aqua_block', 'assets/aqua_block.png');
     game.load.image('blue_block', 'assets/blue_block.png');
     game.load.image('green_block', 'assets/green_block.png');

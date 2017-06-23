@@ -59,26 +59,32 @@ var menuState = {
   },
 
   createTitleText: function() {
-    var nameLabel = game.add.text(game.width/2, 80,
-      'Colors',
-      { font: '50px Helvetica', fill: '#ffffff' }
-    );
-    nameLabel.anchor.setTo(0.5, 0.5);
+    var title = game.add.image(game.width/2, game.height / 4, 'colors_logo');
+    title.anchor.x = 0.5;
+    title.anchor.y = 0;
+    title.scale.x = 0.5;
+    title.scale.y = 0.5;
 
-    var scoreLabel = game.add.text(game.width/2, game.height/2,
-      'Score: ' + game.global.score,
-      { font: '25px Helvetica', fill: '#ffffff' }
+    var authorLabel = game.add.text(game.width/2, 240,
+      'By Bill Kratzer',
+      { font: '24px Helvetica', fill: '#aaa' }
     );
-    scoreLabel.anchor.setTo(0.5, 0.5);
+    authorLabel.anchor.setTo(0.5, 0.5);
+
+    // var scoreLabel = game.add.text(game.width/2, game.height/2,
+    //   'Score: ' + game.global.score,
+    //   { font: '25px Helvetica', fill: '#ffffff' }
+    // );
+    // scoreLabel.anchor.setTo(0.5, 0.5);
 
     var startLabel = game.add.text(game.width/2, game.height - 80,
-      'Press the UP Arrow Key to Start!',
-      { font: '25px Helvetica', fill: '#ffffff' }
+      'Press the Space Bar to Start!',
+      { font: '25px Helvetica', fill: '#eee' }
     );
     startLabel.anchor.setTo(0.5, 0.5);
 
-    var upKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
-    upKey.onDown.add(this.start, this);
+    var spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    spaceKey.onDown.add(this.start, this);
   },
 
   spawnNextBlock: function() {
