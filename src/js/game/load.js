@@ -22,6 +22,7 @@ var loadState = {
 
     game.load.image('menu_background', 'assets/menu_background.png');
     game.load.image('game_background', 'assets/game_background.png');
+    game.load.image('popup_panel', 'assets/panel_640x120.png');
 
     game.load.audio('intro-music', ['assets/Hypnotic-Puzzle.mp3']);
     game.load.audio('music', ['assets/Action-Rhythm8.mp3']);

@@ -30,6 +30,15 @@ var playState = {
 
     var spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(this.goSpace, this);
+
+    var escapeKey = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
+    escapeKey.onDown.add(this.keyEscape, this);
+
+    game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.keyQ, this);
+
+    game.input.keyboard.addKey(Phaser.Keyboard.Y).onDown.add(this.keyY, this);
+    game.input.keyboard.addKey(Phaser.Keyboard.N).onDown.add(this.keyN, this);
+
   },
 
   createScoreBox: function() {
@@ -55,6 +64,85 @@ var playState = {
     this.music = game.add.audio('music');
     this.music.loop = true;
     this.music.play();
+  },
+
+  keyQ: function() {
+    if (game.paused) {
+      return;
+    }
+
+    game.paused = true;
+
+    var w = game.width;
+    var h = game.height;
+
+    var panel = game.add.sprite(w / 2, h / 4, 'popup_panel');
+    panel.anchor.setTo(0.5, 0.5);
+
+    var label = game.add.text(w / 2, h / 4, 'Quit Game?  (Y/N)', { font: '32px Exo 2', fill: '#eee' });
+    label.anchor.setTo(0.5, 0.5);
+
+    this.quitPanel = {
+     panel: panel,
+     label: label
+    }
+
+  },
+
+  keyY: function() {
+    if (this.quitPanel) {
+      game.paused = false;
+      this.destroyQuitPanel();
+      this.playerDie();
+    }
+  },
+
+  keyN: function() {
+    if (this.quitPanel) {
+      game.paused = false;
+      this.destroyQuitPanel();
+    }
+  },
+
+  destroyQuitPanel: function() {
+    var p = this.quitPanel;
+    p.panel.destroy();
+    p.label.destroy();
+    this.quitPanel = null;
+  },
+
+  keyEscape: function() {
+    if (this.quitPanel) {
+      return;
+    }
+    game.paused = !game.paused;
+
+    var w = game.width;
+    var h = game.height;
+
+    if (game.paused) {
+       var panel = game.add.sprite(w / 2, h / 4, 'popup_panel');
+       panel.anchor.setTo(0.5, 0.5);
+
+       var label1 = game.add.text(w / 2, h / 4 - 10, 'Game Paused', { font: '25px Exo 2', fill: '#eee' });
+       label1.anchor.setTo(0.5, 1.0);
+
+       var label2 = game.add.text(w / 2, h / 4 + 10, 'Press ESC to resume.', { font: '25px Exo 2', fill: '#eee' });
+       label2.anchor.setTo(0.5, 0.0);
+
+       this.pausePanel = {
+         panel: panel,
+         label1: label1,
+         label2: label2
+       };
+    }
+    else {
+      this.pausePanel.panel.destroy();
+      this.pausePanel.label1.destroy();
+      this.pausePanel.label2.destroy();
+      this.pausePanel = null;
+    }
+
   },
 
   goLeft: function() {
