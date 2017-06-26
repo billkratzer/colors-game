@@ -21,6 +21,7 @@ var loadState = {
     game.load.image('yellow_block', 'assets/yellow_block.png');
 
     game.load.image('menu_background', 'assets/menu_background.png');
+    game.load.image('game_background', 'assets/game_background.png');
   },
 
   create: function() {

@@ -82,7 +82,8 @@ var menuState = {
       { font: '25px Helvetica', fill: '#eee' }
     );
     startLabel.anchor.setTo(0.5, 0.5);
-
+    game.add.tween(startLabel).to({angle: -2}, 500).to({angle: 2}, 1000).to({angle: 0}, 500).loop().start();
+    
     var spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(this.start, this);
   },

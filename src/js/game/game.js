@@ -1,8 +1,4 @@
-var game = new Phaser.Game(640, 480, Phaser.AUTO, 'game');
-
-game.global = {
-  score: 0
-}
+var game = new Phaser.Game(640, 480);
 
 game.state.add('boot', bootState);
 game.state.add('load', loadState);

@@ -1,113 +1,169 @@
 var playState = {
 
-  createWorld: function() {
-    this.walls = game.add.group();
-    this.walls.enableBody = true;
+  initNewGame: function() {
+    game.global = {
+      level: 1,
+      score: 0,
 
-    game.add.sprite(0, 0, 'wallV', 0, this.walls);  // Left
-    game.add.sprite(480, 0, 'wallV', 0, this.walls); // Right
+      pieceTimer: null,
 
-    game.add.sprite(0, 0, 'wallH', 0, this.walls); // Top left
-    game.add.sprite(300, 0, 'wallH', 0, this.walls); // Top right
-    game.add.sprite(0, 320, 'wallH', 0, this.walls); // Bottom left
-    game.add.sprite(300, 320, 'wallH', 0, this.walls); // Bottom right
-    game.add.sprite(-100, 160, 'wallH', 0, this.walls); // Middle left
-    game.add.sprite(400, 160, 'wallH', 0, this.walls); // Middle right
+      board: new GameBoard(9, 14),
+      currentPiece: new GamePiece()
+    }
 
-    var middleTop = game.add.sprite(100, 80, 'wallH', 0, this.walls); middleTop.scale.setTo(1.5, 1);
-    var middleBottom = game.add.sprite(100, 240, 'wallH', 0, this.walls); middleBottom.scale.setTo(1.5, 1);
+    game.global.pieceTimer = game.time.events.loop(1000, this.fallPiece, this);
+    game.global.board.print();
+  },
 
-    // Set all the walls to be immovable
-    this.walls.setAll('body.immovable', true);
+  initKeyboard: function() {
+    var leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+    leftKey.onDown.add(this.goLeft, this);
+
+    var rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+    rightKey.onDown.add(this.goRight, this);
+
+    var upKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
+    upKey.onDown.add(this.goUp, this);
+
+    var downKey = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+    downKey.onDown.add(this.goDown, this);
+
+    var spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    spaceKey.onDown.add(this.goSpace, this);
+  },
+
+  createScoreBox: function() {
+    this.scoreLabel = game.add.text(game.width - 10, 10,
+      'Score: 0',
+      { font: '18px Helvetica', fill: '#aaa' }
+    );
+    this.scoreLabel.anchor.setTo(1.0, 0.0);
+  },
+
+  updateScoreBox: function() {
+    this.scoreLabel.text = 'Score: ' + game.global.score;
   },
 
   create: function() {
-    game.global.score = 0;
+    game.add.image(0, 0, 'game_background');
 
-    game.stage.backgroundColor="#3498db";
-    game.physics.startSystem(Phaser.Physics.ARCADE);
-    game.renderer.renderSession.roundPixels = true;
+    this.createScoreBox();
 
-    this.player = game.add.sprite(game.width/2, game.height/2, 'player');
-    this.player.anchor.setTo(0.5, 0.5);
-
-    game.physics.arcade.enable(this.player);
-    this.player.body.gravity.y = 500;
-
-    this.cursor = game.input.keyboard.createCursorKeys();
-
-    this.createWorld();
-
-    this.coin = game.add.sprite(60, 140, 'coin');
-    this.coin.anchor.setTo(0.5, 0.5);
-    game.physics.arcade.enable(this.coin);
-
-    this.enemies = game.add.group();
-    this.enemies.enableBody = true;
-    this.enemies.createMultiple(10, 'enemy');
-    game.time.events.loop(2200, this.addEnemy, this);
-
-    this.scoreLabel = game.add.text(30, 30, 'score: 0',
-      {
-        font: '18px Helvetica',
-        fill: '#ffffff'
-      }
-    );
+    this.initNewGame();
+    this.initKeyboard();
   },
 
-  addEnemy: function() {
-    var enemy = this.enemies.getFirstDead();
-    if (!enemy) {
+  goLeft: function() {
+    console.log("Left");
+    var piece = game.global.currentPiece;
+    var board = game.global.board;
+    if (board.outOfBounds(piece, -1, 0)) {
       return;
     }
 
-    enemy.anchor.setTo(0.5, 1);
-    enemy.reset(game.width/2, 0);
-    enemy.body.gravity.y = 500;
-    enemy.body.velocity.x = 100 * game.rnd.pick([-1,1]);
-    enemy.body.bounce.x = 1;
-    enemy.checkWorldBounds = true;
-    enemy.outOfBoundsKill = true;
+    if (board.collides(piece, -1, 0)) {
+      return;
+    }
+
+    piece.moveLeft();
+  },
+
+  goRight: function() {
+    console.log("Right");
+    var piece = game.global.currentPiece;
+    var board = game.global.board;
+    if (board.outOfBounds(piece, 1, 0)) {
+      return;
+    }
+
+    if (board.collides(piece, 1, 0)) {
+      return;
+    }
+    piece.moveRight();
+  },
+
+  goUp: function() {
+    console.log("Up");
+    var piece = game.global.currentPiece;
+    piece.rotate();
+  },
+
+  goDown: function() {
+    console.log("Down");
+    this.fallPiece();
+  },
+
+  goSpace: function() {
+    console.log("Space");
+    var piece = game.global.currentPiece;
+    var board = game.global.board;
+
+    while (true) {
+      if (board.outOfBounds(piece, 0, 1) || board.collides(piece, 0, 1)) {
+        board.addPiece(piece);
+        this.lookForMatches();
+        this.newPiece();
+        return;
+      }
+      piece.moveDown();
+    }
+  },
+
+  lookForMatches: function() {
+    var board = game.global.board;
+    var matches = board.findMatches();
+
+    var cycle = 1;
+    while (matches && matches.length > 0) {
+      for (var block of matches) {
+        block.sprite.destroy();
+      }
+      board.collapse();
+
+      game.global.score = game.global.score + this.calcPoints(matches.length, cycle);
+      this.updateScoreBox();
+
+      matches = board.findMatches();
+      cycle++;
+    }
+  },
+
+  fallPiece: function() {
+    var piece = game.global.currentPiece;
+    var board = game.global.board;
+    if (board.outOfBounds(piece, 0, 1)) {
+      board.addPiece(piece);
+      this.newPiece();
+      return;
+    }
+
+    if (board.collides(piece, 0, 1)) {
+      board.addPiece(piece);
+      this.lookForMatches();
+      this.newPiece();
+      return;
+    }
+    piece.moveDown();
   },
 
   update: function() {
-    game.physics.arcade.collide(this.player, this.walls);
-    game.physics.arcade.collide(this.enemies, this.walls);
-    game.physics.arcade.overlap(this.player, this.coin, this.takeCoin, null, this);
-    game.physics.arcade.overlap(this.player, this.enemies, this.playerDie, null, this);
-    this.movePlayer();
-    if (!this.player.inWorld) {
-      this.playerDie();
-    }
   },
 
-  takeCoin: function(player, coin) {
-    game.global.score += 5;
-    this.scoreLabel.text = 'score: ' + game.global.score;
-
-    var newX = game.rnd.integerInRange(0, game.width);
-    var newY = game.rnd.integerInRange(0, game.height);
-
-    this.coin.reset(newX, newY);
-    this.coin.reset(newX, newY);
-  },
-  movePlayer: function() {
-    if (this.cursor.left.isDown) {
-      this.player.body.velocity.x = -200;
-    }
-    else if (this.cursor.right.isDown) {
-      this.player.body.velocity.x = 200;
-    }
-    else {
-      this.player.body.velocity.x = 0;
-    }
-
-    if (this.cursor.up.isDown && this.player.body.touching.down) {
-      this.player.body.velocity.y = -320;
-    }
-  },
   playerDie: function() {
     game.state.start('menu');
-  }
+  },
 
+  newPiece: function() {
+    var newPiece = new GamePiece();
+    if (game.global.board.collides(newPiece, 0,0)) {
+      this.playerDie();
+    }
+    else {
+      game.global.currentPiece = newPiece;
+    }
+  },
+
+  calcPoints: function(numberOfBlocks, collapseCycle) {
+      return game.global.level * numberOfBlocks * collapseCycle;
+  }
 }
