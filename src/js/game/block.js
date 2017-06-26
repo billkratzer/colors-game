@@ -66,7 +66,7 @@ class GameBlock {
 
   updateSpritePosition() {
     this.sprite.x = this.x * 32 + (game.width/2 - (32 * 9)/2);
-    this.sprite.y = this.y * 32 + 22;
+    this.sprite.y = this.y * 32 + 12;
   }
 
 };

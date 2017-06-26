@@ -7,7 +7,7 @@ var playState = {
 
       pieceTimer: null,
 
-      board: new GameBoard(9, 14),
+      board: new GameBoard(9, 19),
       currentPiece: new GamePiece()
     }
 
@@ -51,6 +51,10 @@ var playState = {
 
     this.initNewGame();
     this.initKeyboard();
+
+    this.music = game.add.audio('music');
+    this.music.loop = true;
+    this.music.play();
   },
 
   goLeft: function() {
@@ -150,6 +154,7 @@ var playState = {
   },
 
   playerDie: function() {
+    this.music.stop();
     game.state.start('menu');
   },
 

@@ -9,26 +9,26 @@ var menuState = {
 
     this.currentBlock = null;
 
-    for (i = 0; i < 480 / 32; i++) {
+    for (i = 0; i < game.height / 32; i++) {
       this.blockSource.push({
         x: 0,
         y: 0 - 32
       });
       this.blockDest.push({
         x: 0,
-        y: 480 - (i + 1) * 32
+        y: game.height - (i + 1) * 32
       });
       this.maxBlocks++;
     }
 
-    for (i = 1; i < 640 / 32 - 1; i++) {
+    for (i = 1; i < game.width / 32 - 1; i++) {
       this.blockSource.push({
         x: i * 32,
         y: 0 - 32
       });
       this.blockDest.push({
         x: i * 32,
-        y: 480 - 32
+        y: game.height - 32
       });
       this.maxBlocks++;
 
@@ -43,14 +43,14 @@ var menuState = {
       this.maxBlocks++;
     }
 
-    for (i = 0; i < 480 / 32; i++) {
+    for (i = 0; i < game.height / 32; i++) {
       this.blockSource.push({
-        x: 640 - 32,
+        x: game.width - 32,
         y: 0 - 32
       });
       this.blockDest.push({
-        x: 640 - 32,
-        y: 480 - (i + 1) * 32
+        x: game.width - 32,
+        y: game.height - (i + 1) * 32
       });
       this.maxBlocks++;
     }
@@ -59,15 +59,15 @@ var menuState = {
   },
 
   createTitleText: function() {
-    var title = game.add.image(game.width/2, game.height / 4, 'colors_logo');
+    var title = game.add.image(game.width/2, game.height / 6, 'colors_logo');
     title.anchor.x = 0.5;
     title.anchor.y = 0;
     title.scale.x = 0.5;
     title.scale.y = 0.5;
 
-    var authorLabel = game.add.text(game.width/2, 240,
+    var authorLabel = game.add.text(game.width/2, game.height * 2/5,
       'By Bill Kratzer',
-      { font: '24px Helvetica', fill: '#aaa' }
+      { font: '24px Exo 2', fill: '#aaa' }
     );
     authorLabel.anchor.setTo(0.5, 0.5);
 
@@ -79,11 +79,11 @@ var menuState = {
 
     var startLabel = game.add.text(game.width/2, game.height - 80,
       'Press the Space Bar to Start!',
-      { font: '25px Helvetica', fill: '#eee' }
+      { font: '25px Exo 2', fill: '#eee' }
     );
     startLabel.anchor.setTo(0.5, 0.5);
     game.add.tween(startLabel).to({angle: -2}, 500).to({angle: 2}, 1000).to({angle: 0}, 500).loop().start();
-    
+
     var spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(this.start, this);
   },
@@ -116,6 +116,10 @@ var menuState = {
     this.spawnNextBlock();
 
     this.createTitleText();
+
+    this.music = game.add.audio('intro-music');
+    this.music.loop = true;
+    this.music.play();
   },
 
   update: function() {
@@ -130,6 +134,7 @@ var menuState = {
   },
 
   start: function() {
+    this.music.stop();
     game.state.start('play');
   }
 
