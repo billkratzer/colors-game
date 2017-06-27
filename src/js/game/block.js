@@ -35,6 +35,8 @@ class GameBlock {
   cloneExploding() {
     var block = new GameBlock(GameBlockType.EXPLODING, this.x, this.y);
     block.setOffset(game.width/2 - (32 * 9)/2, 18);
+    block.sprite.alpha = 0;
+    game.add.tween(block.sprite).to({alpha: 1}, 200).to({alpha: 0}, 800).start();
     return block;
   }
 
