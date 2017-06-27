@@ -21,6 +21,10 @@ var loadState = {
     game.load.image('yellow_block', 'assets/yellow_block.png');
     game.load.image('exploding_block', 'assets/exploding_block.png');
 
+    game.load.image('red_particle', 'assets/red_particle.png');
+    game.load.image('orange_particle', 'assets/orange_particle.png');
+    game.load.image('yellow_particle', 'assets/yellow_particle.png');
+
     game.load.image('menu_background', 'assets/menu_background.png');
     game.load.image('game_background', 'assets/game_background.png');
     game.load.image('popup_panel', 'assets/panel_640x120.png');

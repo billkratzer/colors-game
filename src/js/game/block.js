@@ -36,7 +36,18 @@ class GameBlock {
     var block = new GameBlock(GameBlockType.EXPLODING, this.x, this.y);
     block.setOffset(game.width/2 - (32 * 9)/2, 18);
     block.sprite.alpha = 0;
-    game.add.tween(block.sprite).to({alpha: 1}, 200).to({alpha: 0}, 800).start();
+
+    var emitter = game.add.emitter(block.sprite.x + 16, block.sprite.y + 16);
+    emitter.setXSpeed(-50, 50);
+    emitter.setYSpeed(-50, 50);
+    emitter.gravity = {x: 0, y:0};
+    emitter.makeParticles('red_particle', 0, 24, true, true);
+    emitter.makeParticles('orange_particle', 0, 24, true, true);
+    emitter.makeParticles('yellow_particle', 0, 32, true, true);
+    emitter.setAlpha(1.0, 0.1, 300, Phaser.Easing.Exponential.None);
+    emitter.setScale(2.0, 1.0, 2.0, 1.0, 300);
+    emitter.autoAlpha = true;
+    emitter.start(true, 900, 0, 100);
     return block;
   }
 

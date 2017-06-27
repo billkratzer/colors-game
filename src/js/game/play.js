@@ -72,7 +72,17 @@ var playState = {
 
 // The "T" key is simiply used to test things right now
   keyT: function() {
-    game.camera.shake(0.08, 3000);
+    // game.camera.shake(0.08, 3000);
+
+    var leftEmitter = game.add.emitter(500, 500);
+    //leftEmitter.bounce.setTo(0.5, 0.5);
+    leftEmitter.setXSpeed(-100, 100);
+    leftEmitter.setYSpeed(-100, 100);
+    leftEmitter.gravity = {x: 0, y:0};
+    leftEmitter.makeParticles('red_particle', 0, 120, true, true);
+    leftEmitter.setAlpha(1, .2, 500);
+    leftEmitter.autoAlpha = true;
+    leftEmitter.start(true, 1000, 0, 100);
     return;
   },
 
@@ -243,7 +253,7 @@ var playState = {
 
     game.global.collapseCycle++;
 
-    game.time.events.add(1000, this.collapse, this);
+    game.time.events.add(400, this.collapse, this);
   },
 
   collapse: function() {
