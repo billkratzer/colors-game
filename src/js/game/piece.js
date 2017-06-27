@@ -1,9 +1,10 @@
 class GamePiece {
-  constructor() {
+  constructor(current) {
     this.blocks = new Array();
     this.blocks.push(this.buildBlock(0));
     this.blocks.push(this.buildBlock(1));
     this.blocks.push(this.buildBlock(2));
+    this.setCurrent(current);
   }
 
   buildBlock(index) {
@@ -43,6 +44,34 @@ class GamePiece {
     }
     this.blocks[this.blocks.length - 1] = firstBlock;
     this.blocks[this.blocks.length - 1].moveDown(this.blocks.length - 1);
+  }
+
+  hide() {
+    for (var block of this.blocks) {
+      block.hide();
+    }
+  }
+
+  show() {
+    for (var block of this.blocks) {
+      block.show();
+    }
+  }
+
+  setCurrent(current) {
+    var offX;
+    var offY;
+    if (current) {
+      offX = (game.width/2 - (32 * 9)/2);
+      offY = 18;
+    }
+    else {
+      offX = (game.width/2 + (32 * 9)/2) - 20;
+      offY = 50;
+    }
+    for (var block of this.blocks) {
+      block.setOffset(offX, offY);
+    }
   }
 
 };

@@ -1,3 +1,5 @@
+var modal = false;
+
 var playState = {
 
   initNewGame: function() {
@@ -7,8 +9,11 @@ var playState = {
 
       pieceTimer: null,
 
+      showNextPiece: true,
+
       board: new GameBoard(9, 19),
-      currentPiece: new GamePiece()
+      currentPiece: new GamePiece(true),
+      nextPiece: new GamePiece(false)
     }
 
     game.global.pieceTimer = game.time.events.loop(1000, this.fallPiece, this);
@@ -16,47 +21,44 @@ var playState = {
   },
 
   initKeyboard: function() {
-    var leftKey = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-    leftKey.onDown.add(this.goLeft, this);
+    game.input.keyboard.addKey(Phaser.Keyboard.LEFT).onDown.add(this.keyLeft, this);
+    game.input.keyboard.addKey(Phaser.Keyboard.RIGHT).onDown.add(this.keyRight, this);
+    game.input.keyboard.addKey(Phaser.Keyboard.UP).onDown.add(this.keyUp, this);
+    game.input.keyboard.addKey(Phaser.Keyboard.DOWN).onDown.add(this.keyDown, this);
 
-    var rightKey = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-    rightKey.onDown.add(this.goRight, this);
+    game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.add(this.keySpace, this);
 
-    var upKey = game.input.keyboard.addKey(Phaser.Keyboard.UP);
-    upKey.onDown.add(this.goUp, this);
-
-    var downKey = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
-    downKey.onDown.add(this.goDown, this);
-
-    var spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    spaceKey.onDown.add(this.goSpace, this);
-
-    var escapeKey = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
-    escapeKey.onDown.add(this.keyEscape, this);
-
+    game.input.keyboard.addKey(Phaser.Keyboard.TAB).onDown.add(this.keyTab, this);
+    game.input.keyboard.addKey(Phaser.Keyboard.ESC).onDown.add(this.keyEscape, this);
     game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.keyQ, this);
-
-    game.input.keyboard.addKey(Phaser.Keyboard.Y).onDown.add(this.keyY, this);
-    game.input.keyboard.addKey(Phaser.Keyboard.N).onDown.add(this.keyN, this);
-
+    game.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(this.keyC, this);
   },
 
   createScoreBox: function() {
-    this.scoreLabel = game.add.text(game.width - 10, 10,
-      'Score: 0',
-      { font: '18px Helvetica', fill: '#aaa' }
-    );
-    this.scoreLabel.anchor.setTo(1.0, 0.0);
+    var font = { font: '18px Exo 2', fill: '#aaa' };
+    this.scoreLabel = game.add.text(10, 10, 'Score: 0', font);
+    this.scoreLabel.anchor.setTo(0.0, 0.0);
+
+    this.levelLabel = game.add.text(10, 40, 'Level: 1', font);
+    this.levelLabel.anchor.setTo(0.0, 0.0);
+  },
+
+  createNextPieceBox: function() {
+    var font = { font: '18px Exo 2', fill: '#aaa' };
+    this.nextPieceLabel = game.add.text(game.width * 5/6, 10, 'Next Piece', font);
+    this.nextPieceLabel.anchor.setTo(0.5, 0.0);
   },
 
   updateScoreBox: function() {
     this.scoreLabel.text = 'Score: ' + game.global.score;
+    this.levelLabel.text = 'Level: ' + game.global.level;
   },
 
   create: function() {
     game.add.image(0, 0, 'game_background');
 
     this.createScoreBox();
+    this.createNextPieceBox();
 
     this.initNewGame();
     this.initKeyboard();
@@ -64,6 +66,11 @@ var playState = {
     this.music = game.add.audio('music');
     this.music.loop = true;
     this.music.play();
+  },
+
+  keyC: function() {
+    game.camera.shake(0.08, 3000);
+    return;
   },
 
   keyQ: function() {
@@ -81,6 +88,10 @@ var playState = {
 
     var label = game.add.text(w / 2, h / 4, 'Quit Game?  (Y/N)', { font: '32px Exo 2', fill: '#eee' });
     label.anchor.setTo(0.5, 0.5);
+
+    game.input.keyboard.reset(true);
+    game.input.keyboard.addKey(Phaser.Keyboard.Y).onDown.add(this.keyY, this);
+    game.input.keyboard.addKey(Phaser.Keyboard.N).onDown.add(this.keyN, this);
 
     this.quitPanel = {
      panel: panel,
@@ -101,7 +112,18 @@ var playState = {
     if (this.quitPanel) {
       game.paused = false;
       this.destroyQuitPanel();
+      this.initKeyboard();
     }
+  },
+
+  keyTab: function() {
+    game.global.showNextPiece = !game.global.showNextPiece;
+    if (game.global.showNextPiece) {
+      game.global.nextPiece.show();
+    }
+    else {
+      game.global.nextPiece.hide();
+    };
   },
 
   destroyQuitPanel: function() {
@@ -112,9 +134,6 @@ var playState = {
   },
 
   keyEscape: function() {
-    if (this.quitPanel) {
-      return;
-    }
     game.paused = !game.paused;
 
     var w = game.width;
@@ -135,17 +154,23 @@ var playState = {
          label1: label1,
          label2: label2
        };
+
+       game.input.keyboard.reset(true);
+       game.input.keyboard.addKey(Phaser.Keyboard.ESC).onDown.add(this.keyEscape, this);
     }
     else {
       this.pausePanel.panel.destroy();
       this.pausePanel.label1.destroy();
       this.pausePanel.label2.destroy();
       this.pausePanel = null;
+
+      game.input.keyboard.reset(true);
+      this.initKeyboard();
     }
 
   },
 
-  goLeft: function() {
+  keyLeft: function() {
     console.log("Left");
     var piece = game.global.currentPiece;
     var board = game.global.board;
@@ -160,7 +185,7 @@ var playState = {
     piece.moveLeft();
   },
 
-  goRight: function() {
+  keyRight: function() {
     console.log("Right");
     var piece = game.global.currentPiece;
     var board = game.global.board;
@@ -174,18 +199,18 @@ var playState = {
     piece.moveRight();
   },
 
-  goUp: function() {
+  keyUp: function() {
     console.log("Up");
     var piece = game.global.currentPiece;
     piece.rotate();
   },
 
-  goDown: function() {
+  keyDown: function() {
     console.log("Down");
     this.fallPiece();
   },
 
-  goSpace: function() {
+  keySpace: function() {
     console.log("Space");
     var piece = game.global.currentPiece;
     var board = game.global.board;
@@ -247,12 +272,21 @@ var playState = {
   },
 
   newPiece: function() {
-    var newPiece = new GamePiece();
+    var newPiece = game.global.nextPiece;
     if (game.global.board.collides(newPiece, 0,0)) {
       this.playerDie();
     }
     else {
       game.global.currentPiece = newPiece;
+      game.global.currentPiece.setCurrent(true);
+      game.global.currentPiece.show();
+      game.global.nextPiece = new GamePiece(false);
+      if (game.global.showNextPiece) {
+        game.global.nextPiece.show();
+      }
+      else {
+        game.global.nextPiece.hide();
+      }
     }
   },
 

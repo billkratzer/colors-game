@@ -24,6 +24,8 @@ class GameBlock {
     this.type = type;
     this.x = x;
     this.y = y;
+    this.offsetX = 0;
+    this.offsetY = 0;
     this.sprite = game.add.image(0, 0, type.image);
     this.sprite.anchor.setTo(0, 0);
     this.updateSpritePosition();
@@ -34,6 +36,12 @@ class GameBlock {
       x: this.x,
       y: this.y
     }
+  }
+
+  setOffset(x, y) {
+      this.offsetX = x;
+      this.offsetY = y;
+      this.updateSpritePosition();
   }
 
   setLogicalPosition(x, y) {
@@ -52,6 +60,14 @@ class GameBlock {
     this.updateSpritePosition();
   }
 
+  show() {
+    this.sprite.visible = true;
+  }
+
+  hide() {
+    this.sprite.visible = false;
+  }
+
   moveUp(delta) {
     this.y = this.y - delta;
     this.updateSpritePosition();
@@ -65,8 +81,8 @@ class GameBlock {
   }
 
   updateSpritePosition() {
-    this.sprite.x = this.x * 32 + (game.width/2 - (32 * 9)/2);
-    this.sprite.y = this.y * 32 + 12;
+    this.sprite.x = this.x * 32 + this.offsetX;
+    this.sprite.y = this.y * 32 + this.offsetY;
   }
 
 };
