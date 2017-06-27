@@ -19,6 +19,7 @@ var loadState = {
     game.load.image('red_block', 'assets/red_block.png');
     game.load.image('white_block', 'assets/white_block.png');
     game.load.image('yellow_block', 'assets/yellow_block.png');
+    game.load.image('exploding_block', 'assets/exploding_block.png');
 
     game.load.image('menu_background', 'assets/menu_background.png');
     game.load.image('game_background', 'assets/game_background.png');

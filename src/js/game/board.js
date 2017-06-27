@@ -122,7 +122,23 @@ class GameBoard {
     }
   }
 
+  clearExploding() {
+    var exploding = [];
+
+    for (var y = 0; y < this.height; y++) {
+      for (var x = 0; x < this.width; x++) {
+        if (this.board[x][y] == GameBlockType.EXPLODING) {
+          this.markEmpty(x, y);
+          exploding.push(this.blocks[x][y]);          
+        }
+      }
+    }
+
+    return exploding;
+}
+
   collapse() {
+    var totalCount = 0;
     var count = 0;
     do {
       count = 0;
@@ -136,6 +152,7 @@ class GameBoard {
               this.blocks[x][y + 1] = this.blocks[x][y];
               this.blocks[x][y] = null;
               this.print();
+              totalCount++;
               count++;
             }  // end if
           } // end if
@@ -144,6 +161,7 @@ class GameBoard {
     }
     while (count > 0);
 
+    return totalCount;
   }
 
   findMatches() {
@@ -191,6 +209,9 @@ class GameBoard {
     if (matchType == GameBlockType.EMPTY) {
       return matchingBlocks;
     }
+    if (matchType == GameBlockType.EXPLODING) {
+      return 0;
+    }
     var posX = x;
     var posY = y;
     while (true) {
@@ -208,9 +229,10 @@ class GameBoard {
       }
 
       if (matchType == this.board[posX][posY]) {
-        this.markEmpty(posX, posY);
-        matchingBlocks.push(this.blocks[posX][posY]);
-        this.blocks[posX][posY] = null;
+        this.board[posX][posY] = GameBlockType.EXPLODING;
+        var oldBlock = this.blocks[posX][posY];
+        matchingBlocks.push(oldBlock);
+        this.blocks[posX][posY] = oldBlock.cloneExploding();
       }
       else {
         return matchingBlocks;
@@ -226,6 +248,10 @@ class GameBoard {
     if (matchType == GameBlockType.EMPTY) {
       return 0;
     }
+    if (matchType == GameBlockType.EXPLODING) {
+      return 0;
+    }
+
     var count = 1;
     var posX = x;
     var posY = y;

@@ -7,6 +7,7 @@ var GameBlockType = {
     RED:    {value: 5, char: 'R', image: 'red_block'},
     WHITE:  {value: 6, char: 'W', image: 'white_block'},
     YELLOW: {value: 7, char: 'Y', image: 'yellow_block'},
+    EXPLODING: {value: 100, char: '*', image: 'exploding_block'},
 
     random: function() {
       return game.rnd.pick([
@@ -29,6 +30,12 @@ class GameBlock {
     this.sprite = game.add.image(0, 0, type.image);
     this.sprite.anchor.setTo(0, 0);
     this.updateSpritePosition();
+  }
+
+  cloneExploding() {
+    var block = new GameBlock(GameBlockType.EXPLODING, this.x, this.y);
+    block.setOffset(game.width/2 - (32 * 9)/2, 18);
+    return block;
   }
 
   getLogicalPosition() {

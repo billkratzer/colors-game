@@ -8,6 +8,8 @@ var playState = {
       score: 0,
 
       pieceTimer: null,
+      collapseTimer: null,
+      collapseCycle: 0,
 
       showNextPiece: true,
 
@@ -31,7 +33,7 @@ var playState = {
     game.input.keyboard.addKey(Phaser.Keyboard.TAB).onDown.add(this.keyTab, this);
     game.input.keyboard.addKey(Phaser.Keyboard.ESC).onDown.add(this.keyEscape, this);
     game.input.keyboard.addKey(Phaser.Keyboard.Q).onDown.add(this.keyQ, this);
-    game.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(this.keyC, this);
+    game.input.keyboard.addKey(Phaser.Keyboard.T).onDown.add(this.keyT, this);
   },
 
   createScoreBox: function() {
@@ -68,7 +70,8 @@ var playState = {
     this.music.play();
   },
 
-  keyC: function() {
+// The "T" key is simiply used to test things right now
+  keyT: function() {
     game.camera.shake(0.08, 3000);
     return;
   },
@@ -229,20 +232,32 @@ var playState = {
   lookForMatches: function() {
     var board = game.global.board;
     var matches = board.findMatches();
-
-    var cycle = 1;
-    while (matches && matches.length > 0) {
-      for (var block of matches) {
-        block.sprite.destroy();
-      }
-      board.collapse();
-
-      game.global.score = game.global.score + this.calcPoints(matches.length, cycle);
-      this.updateScoreBox();
-
-      matches = board.findMatches();
-      cycle++;
+    if ((!matches) || (matches.length == 0)) {
+      game.global.collapseCycle = 0;
+      return;
     }
+
+    for (var block of matches) {
+      block.sprite.destroy();
+    }
+
+    game.global.collapseCycle++;
+
+    game.time.events.add(1000, this.collapse, this);
+  },
+
+  collapse: function() {
+    var board = game.global.board;
+    var blocks = board.clearExploding();
+    for (var block of blocks) {
+      block.sprite.destroy();
+    }
+    var count = board.collapse();
+
+    game.global.score = game.global.score + this.calcPoints(count, game.global.collapseCycle);
+    this.updateScoreBox();
+
+    this.lookForMatches();
   },
 
   fallPiece: function() {
