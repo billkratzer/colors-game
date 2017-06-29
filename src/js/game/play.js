@@ -11,6 +11,11 @@ var playState = {
       collapseTimer: null,
       collapseCycle: 0,
 
+      marquee: {
+        visible: false,
+        graphics: null
+      },
+
       showNextPiece: true,
 
       board: new GameBoard(9, 19),
@@ -68,11 +73,95 @@ var playState = {
     this.music = game.add.audio('music');
     this.music.loop = true;
     this.music.play();
+
+    this.showMarquee();
+  },
+
+  showMarquee: function() {
+    m = game.global.marquee;
+    m.visible = true;
+
+    m.graphics = game.add.graphics(0, 0);
+    m.graphics.beginFill(0x000000, 0.7);
+    m.graphics.drawRect(0, 0, game.width, game.height);
+    m.graphics.endFill();
+
+    m.title = game.add.image(0 - game.width, game.height * .10, 'marquee_easy_peasy_title');
+    m.title.anchor.x = 0.5;
+    m.title.anchor.y = 0;
+
+    m.titleTween = game.add.tween(m.title).to({x: game.width/2}, 2000).easing(Phaser.Easing.Bounce.Out).start();
+
+    m.helpLabel = game.add.text(game.width / 2, game.height * .40, 'Line up three similar colors in a row to score points!', { font: '25px Exo 2', fill: '#bbb' });
+    m.helpLabel.anchor.setTo(0.5, 0.5);
+
+    m.helpImage = game.add.image(game.width / 2, game.height * .60, 'marquee_easy_peasy_help');
+    m.helpImage.anchor.setTo(0.5, 0.5);
+    m.helpImage.scale.setTo(0.5, 0.5);
+    m.helpImage.alpha = 0;
+
+    m.helpTween = game.add.tween(m.helpImage).to({alpha: 1.0}, 1000).start();
+
+
+    m.startLabel = game.add.text(game.width / 2, game.height * .90, 'Press the Space Bar to Start!', { font: '32px Exo 2', fill: '#eee' });
+    m.startLabel.anchor.setTo(0.5, 0.5);
+    //game.add.tween(startLabel).to({angle: -2}, 500).to({angle: 2}, 1000).to({angle: 0}, 500).loop().start();
+
+    game.paused = true;
+    game.input.keyboard.reset(true);
+    game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.add(this.hideMarquee, this);
+  },
+
+  pauseUpdate: function() {
+    var m = game.global.marquee;
+    if (m && m.visible) {
+      m.titleTween.update();
+      m.helpTween.update();
+    }
+  },
+
+  hideMarquee: function() {
+    var m = game.global.marquee;
+    m.visible = false;
+
+    if (m.title)  {
+      m.title.destroy();
+      m.title = null;
+    }
+
+    m.titleTween = null;
+
+    if (m.helpLabel) {
+      m.helpLabel.destroy();
+      m.helpLabel = null;
+    }
+
+    if (m.helpImage) {
+      m.helpImage.destroy();
+      m.helpImage = null;
+    }
+
+    if (m.startLabel) {
+      m.startLabel.destroy();
+      m.startLabel = null;
+    }
+
+    if (m.graphics) {
+      m.graphics.destroy();
+      m.graphics = null;
+    }
+
+    game.paused = false;
+    game.input.keyboard.reset(true);
+    this.initKeyboard();
   },
 
 // The "T" key is simiply used to test things right now
   keyT: function() {
+    this.showMarquee();
+    return;
     // game.camera.shake(0.08, 3000);
+
 
     var leftEmitter = game.add.emitter(500, 500);
     //leftEmitter.bounce.setTo(0.5, 0.5);
