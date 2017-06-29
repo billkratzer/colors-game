@@ -7,6 +7,9 @@ var playState = {
       level: 1,
       score: 0,
 
+      blocksUntilNextLevel: 20,
+      totalBlocksCleared: 0,
+
       pieceTimer: null,
       collapseTimer: null,
       collapseCycle: 0,
@@ -41,23 +44,63 @@ var playState = {
     game.input.keyboard.addKey(Phaser.Keyboard.T).onDown.add(this.keyT, this);
   },
 
+  createKeyHelp: function() {
+    var y = 445;
+
+    game.add.text(10, y, 'Keys', FontBuilder.build('22', '#eee'));
+    y = y + 30;
+
+    this.creatKeyHelpLabel(y, 'LEFT', 'Move piece left');
+    y = y + 20;
+
+    this.creatKeyHelpLabel(y, 'RIGHT', 'Move piece right');
+    y = y + 20;
+
+    this.creatKeyHelpLabel(y, 'DOWN', 'Move piece down');
+    y = y + 20;
+
+    this.creatKeyHelpLabel(y, 'UP', 'Rotate colors');
+    y = y + 20;
+
+    this.creatKeyHelpLabel(y, 'SPACE', 'Drop Piece');
+    y = y + 40;
+
+    this.creatKeyHelpLabel(y, 'ESC', 'Pause');
+    y = y + 20;
+
+    this.creatKeyHelpLabel(y, 'Q', 'Quit');
+    y = y + 20;
+  },
+
+  creatKeyHelpLabel(y, key, message) {
+    var keyLabel = game.add.text(55, y, key, FontBuilder.build('14', '#aaa'));
+    keyLabel.anchor.setTo(1.0, 0.0);
+
+    var messageLabel = game.add.text(65, y, message, FontBuilder.build('14', '#aaa'));
+    messageLabel.anchor.setTo(0.0, 0.0);
+  },
+
   createScoreBox: function() {
-    var font = { font: '18px Exo 2', fill: '#aaa' };
-    this.scoreLabel = game.add.text(10, 10, 'Score: 0', font);
+    console.log("Creating the score box!");
+    this.scoreLabel = game.add.text(10, 10, '', FontBuilder.build('22', '#eee'));
     this.scoreLabel.anchor.setTo(0.0, 0.0);
 
-    this.levelLabel = game.add.text(10, 40, 'Level: 1', font);
+    this.levelLabel = game.add.text(10, 50, '', FontBuilder.build('18', '#ccc'));
     this.levelLabel.anchor.setTo(0.0, 0.0);
+
+    this.nextLevelLabel = game.add.text(10, 75, '', FontBuilder.build('18', '#ccc'));
+    this.nextLevelLabel.anchor.setTo(0.0, 0.0);
   },
 
   createNextPieceBox: function() {
-    this.nextPieceLabel = game.add.text(game.width * 5/6, 10, 'Next Piece', FontBuilder.build('18', '#aaa'));
+    this.nextPieceLabel = game.add.text(game.width * 5/6, 10, 'Next Piece', FontBuilder.build('22', '#eee'));
     this.nextPieceLabel.anchor.setTo(0.5, 0.0);
   },
 
   updateScoreBox: function() {
     this.scoreLabel.text = 'Score: ' + game.global.score;
     this.levelLabel.text = 'Level: ' + game.global.level;
+    this.nextLevelLabel.text = 'Next Level in ' + game.global.blocksUntilNextLevel + ' Blocks';
   },
 
   create: function() {
@@ -65,6 +108,7 @@ var playState = {
 
     this.createScoreBox();
     this.createNextPieceBox();
+    this.createKeyHelp();
 
     this.initNewGame();
     this.initKeyboard();
@@ -73,6 +117,7 @@ var playState = {
     this.music.loop = true;
     this.music.play();
 
+    this.updateScoreBox();
     this.showMarquee(Marquees.START);
   },
 
@@ -242,10 +287,10 @@ var playState = {
        var panel = game.add.sprite(w / 2, h / 4, 'popup_panel');
        panel.anchor.setTo(0.5, 0.5);
 
-       var label1 = game.add.text(w / 2, h / 4 - 10, 'Game Paused', { font: '25px Exo 2', fill: '#eee' });
+       var label1 = game.add.text(w / 2, h / 4 - 10, 'Game Paused', FontBuilder.build('25', '#eee'));
        label1.anchor.setTo(0.5, 1.0);
 
-       var label2 = game.add.text(w / 2, h / 4 + 10, 'Press ESC to resume.', { font: '25px Exo 2', fill: '#eee' });
+       var label2 = game.add.text(w / 2, h / 4 + 10, 'Press ESC to resume.', FontBuilder.build('25', '#eee'));
        label2.anchor.setTo(0.5, 0.0);
 
        this.pausePanel = {
@@ -351,6 +396,14 @@ var playState = {
     var count = board.collapse();
 
     game.global.score = game.global.score + this.calcPoints(count, game.global.collapseCycle);
+    game.global.blocksUntilNextLevel = game.global.blocksUntilNextLevel - count;
+    game.global.totalBlocksCleared = game.global.totalBlocksCleared + count;
+
+    if (game.global.blocksUntilNextLevel <= 0) {
+      game.global.blocksUntilNextLevel = 20;
+      game.global.level = game.global.level + 1;
+    }
+
     this.updateScoreBox();
 
     this.lookForMatches();
