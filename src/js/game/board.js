@@ -147,6 +147,20 @@ class GameBoard {
     return totalCount;
   }
 
+  getRunOfBlocks(x, y, deltaX, deltaY, length) {
+    var list = [];
+
+    var blockX = x;
+    var blockY = y;
+    for (var i = 0; i < length; i++) {
+      list.push(this.blocks[blockX][blockY]);
+      blockX = blockX + deltaX;
+      blockY = blockY + deltaY;
+    }
+
+    return list;
+  }
+
   findMatches() {
     var matchingBlocks = [];
 
@@ -156,70 +170,56 @@ class GameBoard {
         // Search Down
         var count = this.countInARow(x, y, 0, 1);
         if (count >= 3) {
-          totalCount = totalCount + count;
-          var clearedBlocks = this.clearMatching(x, y, 0, 1);
-          matchingBlocks.push.apply(matchingBlocks, clearedBlocks);
-        }
-
-        // Searcn Up
-        count = this.countInARow(x, y, 0, -1);
-        if (count >= 3) {
-          totalCount = totalCount + count;
-          var clearedBlocks = this.clearMatching(x, y, 0, -1);
-          matchingBlocks.push.apply(matchingBlocks, clearedBlocks);
-        }
-
-        // Search Left
-        count = this.countInARow(x, y, -1, 0);
-        if (count >= 3) {
-          totalCount = totalCount + count;
-          var clearedBlocks = this.clearMatching(x, y, -1, 0);
-          matchingBlocks.push.apply(matchingBlocks, clearedBlocks);
+          matchingBlocks.push.apply(matchingBlocks, this.getRunOfBlocks(x, y, 0, 1, count));
         }
 
         // Search Right
         count = this.countInARow(x, y, 1, 0);
         if (count >= 3) {
-          totalCount = totalCount + count;
-          var clearedBlocks = this.clearMatching(x, y, 1, 0);
-          matchingBlocks.push.apply(matchingBlocks, clearedBlocks);
-        }
-
-        // Search Left/Up
-        count = this.countInARow(x, y, -1, -1);
-        if (count >= 3) {
-          totalCount = totalCount + count;
-          var clearedBlocks = this.clearMatching(x, y, -1, -1);
-          matchingBlocks.push.apply(matchingBlocks, clearedBlocks);
-        }
-
-        // Search Left/Down
-        count = this.countInARow(x, y, -1, 1);
-        if (count >= 3) {
-          totalCount = totalCount + count;
-          var clearedBlocks = this.clearMatching(x, y, -1, 1);
-          matchingBlocks.push.apply(matchingBlocks, clearedBlocks);
+          matchingBlocks.push.apply(matchingBlocks, this.getRunOfBlocks(x, y, 1, 0, count));
         }
 
         // Search Right/Down
         count = this.countInARow(x, y, 1, -1);
         if (count >= 3) {
-          totalCount = totalCount + count;
-          var clearedBlocks = this.clearMatching(x, y, 1, -1);
-          matchingBlocks.push.apply(matchingBlocks, clearedBlocks);
+          matchingBlocks.push.apply(matchingBlocks, this.getRunOfBlocks(x, y, 1, -1, count));
         }
 
         // Search Right/Up
         count = this.countInARow(x, y, 1, 1);
         if (count >= 3) {
-          totalCount = totalCount + count;
-          var clearedBlocks = this.clearMatching(x, y, 1, 1);
-          matchingBlocks.push.apply(matchingBlocks, clearedBlocks);
+          matchingBlocks.push.apply(matchingBlocks, this.getRunOfBlocks(x, y, 1, 1, count));
         }
       }
     }
 
-    return matchingBlocks;
+    return this.explodeMatchingBlocks(matchingBlocks);
+  }
+
+  explodeMatchingBlocks(listOfBlocks) {
+    var uniqueListOfBlocks = [];
+
+    for (var block of listOfBlocks) {
+      if (block.type == GameBlockType.EMPTY) {
+        continue;
+      }
+      if (block.type == GameBlockType.EXPLODING) {
+        continue;
+      }
+      if (this.board[block.x][block.y] == GameBlockType.EMPTY) {
+        continue;
+      }
+      if (this.board[block.x][block.y] == GameBlockType.EXPLODING) {
+        continue;
+      }
+
+      uniqueListOfBlocks.push(block);
+
+      this.board[block.x][block.y] = GameBlockType.EXPLODING;
+      this.blocks[block.x][block.y] = block.cloneExploding();
+    }
+
+    return uniqueListOfBlocks;
   }
 
   clearMatching(x, y, deltaX, deltaY) {

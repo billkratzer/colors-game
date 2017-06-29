@@ -371,8 +371,8 @@ var playState = {
     while (true) {
       if (board.outOfBounds(piece, 0, 1) || board.collides(piece, 0, 1)) {
         board.addPiece(piece);
-        this.lookForMatches();
         this.newPiece();
+        this.lookForMatches();
         return;
       }
       piece.moveDown();
@@ -391,6 +391,17 @@ var playState = {
       block.sprite.destroy();
     }
 
+    var count = matches.length;
+    game.global.score = game.global.score + this.calcPoints(count, game.global.collapseCycle);
+    game.global.blocksUntilNextLevel = game.global.blocksUntilNextLevel - count;
+    game.global.totalBlocksCleared = game.global.totalBlocksCleared + count;
+
+    if (game.global.blocksUntilNextLevel <= 0) {
+      this.levelUp();
+    }
+
+    this.updateScoreBox();
+
     game.global.collapseCycle++;
 
     game.time.events.add(400, this.collapse, this);
@@ -402,17 +413,7 @@ var playState = {
     for (var block of blocks) {
       block.sprite.destroy();
     }
-    var count = board.collapse();
-
-    game.global.score = game.global.score + this.calcPoints(count, game.global.collapseCycle);
-    game.global.blocksUntilNextLevel = game.global.blocksUntilNextLevel - count;
-    game.global.totalBlocksCleared = game.global.totalBlocksCleared + count;
-
-    if (game.global.blocksUntilNextLevel <= 0) {
-      this.levelUp();
-    }
-
-    this.updateScoreBox();
+    board.collapse();
 
     this.lookForMatches();
   },
@@ -428,8 +429,8 @@ var playState = {
 
     if (board.collides(piece, 0, 1)) {
       board.addPiece(piece);
-      this.lookForMatches();
       this.newPiece();
+      this.lookForMatches();
       return;
     }
     piece.moveDown();
