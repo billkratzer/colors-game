@@ -51,8 +51,7 @@ var playState = {
   },
 
   createNextPieceBox: function() {
-    var font = { font: '18px Exo 2', fill: '#aaa' };
-    this.nextPieceLabel = game.add.text(game.width * 5/6, 10, 'Next Piece', font);
+    this.nextPieceLabel = game.add.text(game.width * 5/6, 10, 'Next Piece', FontBuilder.build('18', '#aaa'));
     this.nextPieceLabel.anchor.setTo(0.5, 0.0);
   },
 
@@ -92,7 +91,7 @@ var playState = {
 
     m.titleTween = game.add.tween(m.title).to({x: game.width/2}, 2000).easing(Phaser.Easing.Bounce.Out).start();
 
-    m.helpLabel = game.add.text(game.width / 2, game.height * .40, config.help_text, { font: '25px Exo 2', fill: '#bbb' });
+    m.helpLabel = game.add.text(game.width / 2, game.height * .40, config.help_text, FontBuilder.build('25', '#bbb'));
     m.helpLabel.anchor.setTo(0.5, 0.5);
 
     m.helpImage = game.add.image(game.width / 2, game.height * .60, config.help_image_name);
@@ -186,7 +185,7 @@ var playState = {
     var panel = game.add.sprite(w / 2, h / 4, 'popup_panel');
     panel.anchor.setTo(0.5, 0.5);
 
-    var label = game.add.text(w / 2, h / 4, 'Quit Game?  (Y/N)', { font: '32px Exo 2', fill: '#eee' });
+    var label = game.add.text(w / 2, h / 4, 'Quit Game?  (Y/N)', FontBuilder.build('32', '#eee'));
     label.anchor.setTo(0.5, 0.5);
 
     game.input.keyboard.reset(true);

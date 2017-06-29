@@ -67,7 +67,7 @@ var menuState = {
 
     var authorLabel = game.add.text(game.width/2, game.height * 2/5,
       'By Bill Kratzer',
-      { font: '24px Exo 2', fill: '#aaa' }
+      FontBuilder.build('24', '#aaa')
     );
     authorLabel.anchor.setTo(0.5, 0.5);
 
@@ -79,7 +79,7 @@ var menuState = {
 
     var startLabel = game.add.text(game.width/2, game.height - 80,
       'Press the Space Bar to Start!',
-      { font: '25px Exo 2', fill: '#eee' }
+      FontBuilder.build('25', '#eee')
     );
     startLabel.anchor.setTo(0.5, 0.5);
     game.add.tween(startLabel).to({angle: -2}, 500).to({angle: 2}, 1000).to({angle: 0}, 500).loop().start();
