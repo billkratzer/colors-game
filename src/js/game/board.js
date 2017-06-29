@@ -153,6 +153,7 @@ class GameBoard {
     var totalCount = 0;
     for (var x = 0; x < this.width; x++) {
       for (var y = 0; y < this.height; y++) {
+        // Search Down
         var count = this.countInARow(x, y, 0, 1);
         if (count >= 3) {
           totalCount = totalCount + count;
@@ -160,6 +161,23 @@ class GameBoard {
           matchingBlocks.push.apply(matchingBlocks, clearedBlocks);
         }
 
+        // Searcn Up
+        count = this.countInARow(x, y, 0, -1);
+        if (count >= 3) {
+          totalCount = totalCount + count;
+          var clearedBlocks = this.clearMatching(x, y, 0, -1);
+          matchingBlocks.push.apply(matchingBlocks, clearedBlocks);
+        }
+
+        // Search Left
+        count = this.countInARow(x, y, -1, 0);
+        if (count >= 3) {
+          totalCount = totalCount + count;
+          var clearedBlocks = this.clearMatching(x, y, -1, 0);
+          matchingBlocks.push.apply(matchingBlocks, clearedBlocks);
+        }
+
+        // Search Right
         count = this.countInARow(x, y, 1, 0);
         if (count >= 3) {
           totalCount = totalCount + count;
@@ -167,6 +185,15 @@ class GameBoard {
           matchingBlocks.push.apply(matchingBlocks, clearedBlocks);
         }
 
+        // Search Left/Up
+        count = this.countInARow(x, y, -1, -1);
+        if (count >= 3) {
+          totalCount = totalCount + count;
+          var clearedBlocks = this.clearMatching(x, y, -1, -1);
+          matchingBlocks.push.apply(matchingBlocks, clearedBlocks);
+        }
+
+        // Search Left/Down
         count = this.countInARow(x, y, -1, 1);
         if (count >= 3) {
           totalCount = totalCount + count;
@@ -174,6 +201,15 @@ class GameBoard {
           matchingBlocks.push.apply(matchingBlocks, clearedBlocks);
         }
 
+        // Search Right/Down
+        count = this.countInARow(x, y, 1, -1);
+        if (count >= 3) {
+          totalCount = totalCount + count;
+          var clearedBlocks = this.clearMatching(x, y, 1, -1);
+          matchingBlocks.push.apply(matchingBlocks, clearedBlocks);
+        }
+
+        // Search Right/Up
         count = this.countInARow(x, y, 1, 1);
         if (count >= 3) {
           totalCount = totalCount + count;
@@ -211,7 +247,7 @@ class GameBoard {
         return matchingBlocks;
       }
 
-      if (matchType == this.board[posX][posY]) {
+      if ((matchType == this.board[posX][posY]) || (this.board[posX][posY] == GameBlockType.EXPLODING)) {
         this.board[posX][posY] = GameBlockType.EXPLODING;
         var oldBlock = this.blocks[posX][posY];
         matchingBlocks.push(oldBlock);
@@ -254,7 +290,7 @@ class GameBoard {
         return count;
       }
 
-      if (matchType == this.board[posX][posY]) {
+      if ((matchType == this.board[posX][posY]) || (this.board[posX][posY] == GameBlockType.EXPLODING)) {
         count++;
       }
       else {
