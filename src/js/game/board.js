@@ -23,23 +23,6 @@ class GameBoard {
     }
   }
 
-  // clearPiece(piece) {
-  //   if (!piece) {
-  //     return;
-  //   }
-  //
-  //   for (block of piece.blocks) {
-  //       clearBlock(block);
-  //   }
-  // }
-  //
-  // clearBlock(block) {
-  //   if (!block) {
-  //     return;
-  //   }
-  //   var pos = block.getLogicalPosition();
-  //   board[pos.x][pos.y] = Game.BlockType.EMPTY;
-  // }
 
   isEmpty(x, y) {
     return (this.board[x][y] == GameBlockType.EMPTY);
@@ -129,7 +112,7 @@ class GameBoard {
       for (var x = 0; x < this.width; x++) {
         if (this.board[x][y] == GameBlockType.EXPLODING) {
           this.markEmpty(x, y);
-          exploding.push(this.blocks[x][y]);          
+          exploding.push(this.blocks[x][y]);
         }
       }
     }
