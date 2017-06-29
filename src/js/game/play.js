@@ -26,8 +26,17 @@ var playState = {
       nextPiece: new GamePiece(false)
     }
 
-    game.global.pieceTimer = game.time.events.loop(1000, this.fallPiece, this);
+    this.initPieceTimer();
     game.global.board.print();
+  },
+
+  initPieceTimer: function() {
+    if (game.global.pieceTimer) {
+      game.global.pieceTimer.delay = 1000 - game.global.level * 200;
+    }
+    else {
+      game.global.pieceTimer = game.time.events.loop(1000 - game.global.level * 200, this.fallPiece, this);
+    }
   },
 
   initKeyboard: function() {
@@ -400,8 +409,7 @@ var playState = {
     game.global.totalBlocksCleared = game.global.totalBlocksCleared + count;
 
     if (game.global.blocksUntilNextLevel <= 0) {
-      game.global.blocksUntilNextLevel = 20;
-      game.global.level = game.global.level + 1;
+      this.levelUp();
     }
 
     this.updateScoreBox();
@@ -433,6 +441,17 @@ var playState = {
   playerDie: function() {
     this.music.stop();
     game.state.start('menu');
+  },
+
+  levelUp: function() {
+    game.global.blocksUntilNextLevel = 20;
+    game.global.level = game.global.level + 1;
+
+    this.initPieceTimer();
+
+    if (game.global.level == 2) {
+      this.showMarquee(Marquees.BUCKLE_UP);
+    }
   },
 
   newPiece: function() {

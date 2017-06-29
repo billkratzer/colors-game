@@ -36,6 +36,7 @@ var loadState = {
     // Marquees
     game.load.image('marquee_easy_peasy_title', 'assets/marquee_easy_peasy_title.png');
     game.load.image('marquee_easy_peasy_help', 'assets/marquee_easy_peasy_help.png');
+    game.load.image('marquee_buckle_up_title', 'assets/marquee_buckle_up_title.png');
 
     // Music
     game.load.audio('intro-music', ['assets/Hypnotic-Puzzle.mp3']);
