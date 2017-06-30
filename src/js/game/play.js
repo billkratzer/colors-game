@@ -7,7 +7,7 @@ var playState = {
       level: 1,
       score: 0,
 
-      blocksUntilNextLevel: 20,
+      piecesUntilNextLevel: 20,
       totalBlocksCleared: 0,
 
       pieceTimer: null,
@@ -123,7 +123,7 @@ var playState = {
   updateScoreBox: function() {
     this.scoreLabel.text = 'Score: ' + game.global.score;
     this.levelLabel.text = 'Level: ' + game.global.level;
-    this.nextLevelLabel.text = 'Next Level in ' + game.global.blocksUntilNextLevel + ' Blocks';
+    this.nextLevelLabel.text = 'Next Level in ' + game.global.piecesUntilNextLevel + ' Pieces';
   },
 
   updateCurseBox: function() {
@@ -442,12 +442,7 @@ var playState = {
 
     var count = matches.length;
     game.global.score = game.global.score + this.calcPoints(count, game.global.collapseCycle);
-    game.global.blocksUntilNextLevel = game.global.blocksUntilNextLevel - count;
     game.global.totalBlocksCleared = game.global.totalBlocksCleared + count;
-
-    if (game.global.blocksUntilNextLevel <= 0) {
-      this.levelUp();
-    }
 
     this.updateScoreBox();
 
@@ -502,7 +497,7 @@ var playState = {
   },
 
   levelUp: function() {
-    game.global.blocksUntilNextLevel = 20;
+    game.global.piecesUntilNextLevel = 20;
     game.global.level = game.global.level + 1;
     this.updateScoreBox();
 
@@ -549,6 +544,13 @@ var playState = {
         this.updateCurseBox();
       }
     }
+
+    game.global.piecesUntilNextLevel--;
+    if (game.global.piecesUntilNextLevel <= 0) {
+      this.levelUp();
+    }
+
+    this.updateScoreBox();
   },
 
   calcPoints: function(numberOfBlocks, collapseCycle) {
