@@ -22,7 +22,7 @@ var loadState = {
     game.load.image('orange_block', 'assets/orange_block.png');
     game.load.image('yellow_block', 'assets/yellow_block.png');
     game.load.image('black_block', 'assets/black_block.png');
-    game.load.image('rainbow_block', 'assets/raindbow_block.png');
+    game.load.image('rainbow_block', 'assets/rainbow_block.png');
     game.load.image('exploding_block', 'assets/exploding_block.png');
 
     // Particles
