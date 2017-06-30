@@ -32,10 +32,10 @@ var playState = {
 
   initPieceTimer: function() {
     if (game.global.pieceTimer) {
-      game.global.pieceTimer.delay = 1000 - game.global.level * 200;
+      game.global.pieceTimer.delay = GameSpeed.getSpeedForLevel(game.global.level);
     }
     else {
-      game.global.pieceTimer = game.time.events.loop(1000 - game.global.level * 200, this.fallPiece, this);
+      game.global.pieceTimer = game.time.events.loop(GameSpeed.getSpeedForLevel(game.global.level), this.fallPiece, this);
     }
   },
 
@@ -135,7 +135,7 @@ var playState = {
     m.visible = true;
 
     m.graphics = game.add.graphics(0, 0);
-    m.graphics.beginFill(0x000000, 0.7);
+    m.graphics.beginFill(0x000000, 0.85);
     m.graphics.drawRect(0, 0, game.width, game.height);
     m.graphics.endFill();
 
@@ -207,14 +207,19 @@ var playState = {
     this.initKeyboard();
   },
 
-// The "T" key is simiply used to test things right now
-  keyT: function() {
+  growBoard: function() {
     var board = game.global.board;
     if (!board.isTopRowEmpty()) {
       this.playerDie();
     }
     board.grow();
     this.lookForMatches();
+    return;
+  },
+
+// The "T" key is simiply used to test things right now
+  keyT: function() {
+    this.levelUp();
     return;
     // game.camera.shake(0.08, 3000);
 
@@ -452,11 +457,16 @@ var playState = {
   levelUp: function() {
     game.global.blocksUntilNextLevel = 20;
     game.global.level = game.global.level + 1;
+    this.updateScoreBox();
 
     this.initPieceTimer();
 
     if (game.global.level == 2) {
       this.showMarquee(Marquees.BUCKLE_UP);
+    }
+
+    if (game.global.level == 5) {
+      this.showMarquee(Marquees.BEWARE);
     }
   },
 
