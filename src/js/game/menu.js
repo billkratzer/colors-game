@@ -71,12 +71,6 @@ var menuState = {
     );
     authorLabel.anchor.setTo(0.5, 0.5);
 
-    // var scoreLabel = game.add.text(game.width/2, game.height/2,
-    //   'Score: ' + game.global.score,
-    //   { font: '25px Helvetica', fill: '#ffffff' }
-    // );
-    // scoreLabel.anchor.setTo(0.5, 0.5);
-
     var startLabel = game.add.text(game.width/2, game.height - 80,
       'Press the Space Bar to Start!',
       FontBuilder.build('25', '#eee')
