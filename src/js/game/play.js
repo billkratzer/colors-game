@@ -184,7 +184,8 @@ var playState = {
 
     m.helpImage = game.add.image(game.width / 2, game.height * .60, config.help_image_name);
     m.helpImage.anchor.setTo(0.5, 0.5);
-    m.helpImage.scale.setTo(0.5, 0.5);
+    m.helpImage.scale.setTo(config.help_image_scale, config.help_image_scale);
+
     m.helpImage.alpha = 0;
 
     m.helpTween = game.add.tween(m.helpImage).to({alpha: 1.0}, 1000).start();
@@ -504,8 +505,12 @@ var playState = {
     this.initPieceTimer();
 
     if (game.global.level == 2) {
-      this.showMarquee(Marquees.RAINBOW);
       //this.showMarquee(Marquees.BUCKLE_UP);
+      this.showMarquee(Marquees.RAINBOW);
+    }
+
+    if (game.global.level == 4) {
+      this.showMarquee(Marquees.DIAMONDS);
     }
 
     if (game.global.level == 5) {

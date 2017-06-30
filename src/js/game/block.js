@@ -9,6 +9,7 @@ var GameBlockType = {
     YELLOW:    {value: 7,   char: 'Y', image: 'yellow_block'},
     RAINBOW:   {value: 10,  char: 'r', image: 'rainbow_block'},
     BLACK:     {value: 11,  char: 'r', image: 'black_block'},
+    DIAMOND:   {value: 12,  char: 'r', image: 'diamond'},
     EXPLODING: {value: 100, char: '*', image: 'exploding_block'},
 
     random: function() {
@@ -18,6 +19,13 @@ var GameBlockType = {
       if ((game.global) && (game.global.level >= 2)) {
         if (game.rnd.frac() < 0.10) {
           return this.RAINBOW;
+        }
+      }
+
+      // Rainbox Blocks start appearing at level 4
+      if ((game.global) && (game.global.level >= 4)) {
+        if (game.rnd.frac() < 0.10) {
+          return this.DIAMOND;
         }
       }
 

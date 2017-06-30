@@ -23,6 +23,7 @@ var loadState = {
     game.load.image('yellow_block', 'assets/yellow_block.png');
     game.load.image('black_block', 'assets/black_block.png');
     game.load.image('rainbow_block', 'assets/rainbow_block.png');
+    game.load.image('diamond', 'assets/diamond.png');
     game.load.image('exploding_block', 'assets/exploding_block.png');
 
     // Particles
@@ -44,6 +45,9 @@ var loadState = {
     game.load.image('marquee_cursed_title', 'assets/marquee_cursed_title.png');
     game.load.image('marquee_rainbow_title', 'assets/marquee_rainbow_title.png');
     game.load.image('marquee_rainbow_help', 'assets/marquee_rainbow_help.png');
+    game.load.image('marquee_diamonds_title', 'assets/marquee_diamonds_title.png');
+    game.load.image('marquee_diamonds_help', 'assets/diamond.png');
+
 
     // Music
     game.load.audio('intro-music', ['assets/Hypnotic-Puzzle.mp3']);

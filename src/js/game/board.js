@@ -223,6 +223,10 @@ class GameBoard {
     var totalCount = 0;
     for (var x = 0; x < this.width; x++) {
       for (var y = 0; y < this.height; y++) {
+        // Diamonds don't participate in normal match finding
+        if (this.board[x][y] == GameBlockType.DIAMOND) {
+          continue;
+        }
         // Search Down
         var count = this.countInARow(x, y, 0, 1);
         if (count >= 3) {
