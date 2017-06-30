@@ -514,39 +514,40 @@ var playState = {
   },
 
   newPiece: function() {
-    var newPiece = game.global.nextPiece;
-    if (game.global.board.collides(newPiece, 0,0)) {
+    var gg = game.global;
+    var newPiece = gg.nextPiece;
+    if (gg.board.collides(newPiece, 0,0)) {
       this.playerDie();
     }
     else {
-      game.global.currentPiece = newPiece;
-      game.global.currentPiece.setCurrent(true);
-      game.global.currentPiece.show();
-      game.global.nextPiece = new GamePiece(false);
-      if (game.global.showNextPiece) {
-        game.global.nextPiece.show();
+      gg.currentPiece = newPiece;
+      gg.currentPiece.setCurrent(true);
+      gg.currentPiece.show();
+      gg.nextPiece = new GamePiece(false);
+      if (gg.showNextPiece) {
+        gg.nextPiece.show();
       }
       else {
-        game.global.nextPiece.hide();
+        gg.nextPiece.hide();
       }
-      game.global.piecesUntilNextBoardGrowth = game.global.piecesUntilNextBoardGrowth - 1;
-      if (game.global.piecesUntilNextBoardGrowth <= 0) {
-        if (game.global.currentCurse == CurseType.BOARD_GROW) {
-          game.global.piecesUntilNextBoardGrowth = 10;
+      gg.piecesUntilNextBoardGrowth = gg.piecesUntilNextBoardGrowth - 1;
+      if (gg.piecesUntilNextBoardGrowth <= 0) {
+        if (gg.currentCurse == CurseType.BOARD_GROW) {
+          gg.piecesUntilNextBoardGrowth = 10;
           this.growBoard();
         }
       }
 
-      game.global.cursePieceCount = game.global.cursePieceCount + 1;
-      if (game.global.cursePieceCount > 10) {
-        game.global.cursePieceCount = 0;
-        game.global.currentCurse = null;
+      gg.cursePieceCount = gg.cursePieceCount + 1;
+      if (gg.cursePieceCount > 10) {
+        gg.cursePieceCount = 0;
+        gg.currentCurse = null;
         this.updateCurseBox();
       }
     }
 
-    game.global.piecesUntilNextLevel--;
-    if (game.global.piecesUntilNextLevel <= 0) {
+    gg.piecesUntilNextLevel--;
+    if (gg.piecesUntilNextLevel <= 0) {
       this.levelUp();
     }
 
