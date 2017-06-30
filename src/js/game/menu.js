@@ -90,7 +90,7 @@ var menuState = {
     var source = this.blockSource[i];
     var dest = this.blockDest[i];
 
-    var sprite = game.add.sprite(source.x, source.y, game.rnd.pick(['aqua_block', 'blue_block', 'green_block', 'purple_block', 'red_block', 'white_block', 'yellow_block']));
+    var sprite = game.add.sprite(source.x, source.y, game.rnd.pick(['aqua_block', 'blue_block', 'green_block', 'purple_block', 'red_block', 'orange_block', 'yellow_block']));
     sprite.anchor.setTo(0,0);
     sprite.data.dest = dest;
     sprite.data.deltaY = 50;

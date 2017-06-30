@@ -1,12 +1,14 @@
 var GameBlockType = {
-    EMPTY:  {value: 0, char: '.', image: ''},
-    AQUA:   {value: 1, char: 'A', image: 'aqua_block'},
-    BLUE:   {value: 2, char: 'B', image: 'blue_block'},
-    GREEN:  {value: 3, char: 'G', image: 'green_block'},
-    PURPLE: {value: 4, char: 'P', image: 'purple_block'},
-    RED:    {value: 5, char: 'R', image: 'red_block'},
-    WHITE:  {value: 6, char: 'W', image: 'white_block'},
-    YELLOW: {value: 7, char: 'Y', image: 'yellow_block'},
+    EMPTY:     {value: 0,   char: '.', image: ''},
+    AQUA:      {value: 1,   char: 'A', image: 'aqua_block'},
+    BLUE:      {value: 2,   char: 'B', image: 'blue_block'},
+    GREEN:     {value: 3,   char: 'G', image: 'green_block'},
+    PURPLE:    {value: 4,   char: 'P', image: 'purple_block'},
+    RED:       {value: 5,   char: 'R', image: 'red_block'},
+    ORANGE:    {value: 6,   char: 'O', image: 'orange_block'},
+    YELLOW:    {value: 7,   char: 'Y', image: 'yellow_block'},
+    RAINBOW:   {value: 10,  char: 'r', image: 'rainbow_block'},
+    BLACK:     {value: 11,  char: 'r', image: 'black_block'},
     EXPLODING: {value: 100, char: '*', image: 'exploding_block'},
 
     random: function() {
