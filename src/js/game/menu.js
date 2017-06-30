@@ -95,8 +95,6 @@ var menuState = {
     sprite.data.dest = dest;
     sprite.data.deltaY = 50;
 
-    game.physics.arcade.enable(sprite);
-
     this.currentBlock = sprite;
     this.numberOfBlocks++;
   },
