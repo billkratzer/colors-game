@@ -12,27 +12,26 @@ var GameBlockType = {
     EXPLODING: {value: 100, char: '*', image: 'exploding_block'},
 
     random: function() {
-      var type = game.rnd.pick([
-        this.AQUA,
-        this.BLUE,
-        this.GREEN,
-        this.PURPLE,
-        this.RED
-      ]);
+      var type = this.normalRandom();
+
+      // Black Blocks start appearing at level 5
+      if ((game.global) && (game.global.level >= 5)) {
+        if (game.rnd.frac() < 0.10) {
+          return this.BLACK;
+        }
+      }
 
       return type;
     },
 
     normalRandom: function() {
-      var type = game.rnd.pick([
+      return game.rnd.pick([
         this.AQUA,
         this.BLUE,
         this.GREEN,
         this.PURPLE,
         this.RED
       ]);
-
-      return type;
     }
 }
 
