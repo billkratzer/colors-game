@@ -14,6 +14,13 @@ var GameBlockType = {
     random: function() {
       var type = this.normalRandom();
 
+      // Rainbox Blocks start appearing at level 2
+      if ((game.global) && (game.global.level >= 2)) {
+        if (game.rnd.frac() < 0.10) {
+          return this.RAINBOW;
+        }
+      }
+
       // Black Blocks start appearing at level 5
       if ((game.global) && (game.global.level >= 5)) {
         if (game.rnd.frac() < 0.10) {

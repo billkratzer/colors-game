@@ -1,5 +1,5 @@
 var CurseType = {
-    BOARD_GROW:    { value: 1, name: 'The ever growing board' },
+    BOARD_GROW:    { value: 1, name: 'The ever growing board', marquee: Marquees.CURSED_BOARD_GROW },
     MORE_COLORS:   { value: 2, name: 'Colors everywhere' },
     REVERSE_KEYS:  { value: 3, name: 'Reverse keys' },
     THUNDERSTORM:  { value: 4, name: 'Thunderstorm' },

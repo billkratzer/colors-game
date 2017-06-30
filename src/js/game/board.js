@@ -193,8 +193,32 @@ class GameBoard {
     return list;
   }
 
+  findBlocksOfType(type) {
+    var matchingBlocks = [];
+
+    for (var x = 0; x < this.width; x++) {
+      for (var y = 0; y < this.height; y++) {
+        if (this.board[x][y] == type) {
+          matchingBlocks.push(this.blocks[x][y]);
+        }
+      }
+    }
+
+    return matchingBlocks;
+  }
+
   findMatches() {
     var matchingBlocks = [];
+
+    // Are there any rainbox pieces?  (if so, consider anything beneath a rainbow block a match)
+    var rainbowBlocks = this.findBlocksOfType(GameBlockType.RAINBOW);
+    for (var block of rainbowBlocks) {
+      if (block.y < this.height - 1) {
+        var type = this.board[block.x][block.y + 1];
+        matchingBlocks.push.apply(matchingBlocks, this.findBlocksOfType(type));
+      }
+      matchingBlocks.push(block);
+    }
 
     var totalCount = 0;
     for (var x = 0; x < this.width; x++) {

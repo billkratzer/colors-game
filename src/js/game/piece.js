@@ -1,6 +1,8 @@
 class GamePiece {
+
   constructor(current) {
     this.blocks = new Array();
+    this.rainbowCount = 0;
     this.blocks.push(this.buildBlock(0));
     this.blocks.push(this.buildBlock(1));
     this.blocks.push(this.buildBlock(2));
@@ -11,8 +13,17 @@ class GamePiece {
     this.x = 4;
     this.y = 0;
 
-    var block = new GameBlock(GameBlockType.random(), this.x, this.y + index);
-    return block;
+    var blockType = GameBlockType.random();
+    if (blockType == GameBlockType.RAINBOW) {
+      this.rainbowCount++;
+      if (this.rainbowCount > 1) {
+        while (blockType == GameBlockType.RAINBOW) {
+          blockType = GameBlockType.random();
+        }
+      }
+    }
+
+    return new GameBlock(blockType, this.x, this.y + index);
   }
 
   moveLeft() {

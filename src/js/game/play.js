@@ -499,7 +499,8 @@ var playState = {
     this.initPieceTimer();
 
     if (game.global.level == 2) {
-      this.showMarquee(Marquees.BUCKLE_UP);
+      this.showMarquee(Marquees.RAINBOW);
+      //this.showMarquee(Marquees.BUCKLE_UP);
     }
 
     if (game.global.level == 5) {

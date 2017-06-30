@@ -20,6 +20,13 @@ var Marquees = {
     help_image_name: 'marquee_beware_help'
   },
 
+  RAINBOW:  {
+    title_image_name: 'marquee_rainbow_title',
+    help_text: 'Rainbow blocks will explode blocks when dropped',
+    help_sub_text: '(based on the color it lands on)',
+    help_image_name: 'marquee_rainbow_help'
+  },
+
   CURSED_BOARD_GROW:  {
     title_image_name: 'marquee_cursed_title',
     help_text: 'Watch out!  The board will start growing!',
