@@ -14,6 +14,12 @@ var playState = {
       collapseTimer: null,
       collapseCycle: 0,
 
+      newCurse: null,
+      currentCurse: null,
+      cursePieceCount: 0,
+
+      piecesUntilNextBoardGrowth: 0,
+
       marquee: {
         visible: false,
         graphics: null
@@ -106,10 +112,31 @@ var playState = {
     this.nextPieceLabel.anchor.setTo(0.5, 0.0);
   },
 
+  createCurseBox: function() {
+    this.cursedLabel = game.add.text(game.width * 5/6, 220, 'Cursed!', FontBuilder.build('22', '#eee'));
+    this.cursedLabel.anchor.setTo(0.5, 0.0);
+
+    this.curseDetailsLabel = game.add.text(game.width * 5/6, 250, '', FontBuilder.build('18', '#ccc'));
+    this.curseDetailsLabel.anchor.setTo(0.5, 0.0);
+  },
+
   updateScoreBox: function() {
     this.scoreLabel.text = 'Score: ' + game.global.score;
     this.levelLabel.text = 'Level: ' + game.global.level;
     this.nextLevelLabel.text = 'Next Level in ' + game.global.blocksUntilNextLevel + ' Blocks';
+  },
+
+  updateCurseBox: function() {
+    var curse = game.global.currentCurse;
+    if (curse) {
+      this.cursedLabel.visible = true;
+      this.curseDetailsLabel.visible = true;
+      this.curseDetailsLabel.text = curse.name;
+    }
+    else {
+      this.cursedLabel.visible = false;
+      this.curseDetailsLabel.visible = false;
+    }
   },
 
   create: function() {
@@ -117,6 +144,7 @@ var playState = {
 
     this.createScoreBox();
     this.createNextPieceBox();
+    this.createCurseBox();
     this.createKeyHelp();
 
     this.initNewGame();
@@ -127,6 +155,7 @@ var playState = {
     this.music.play();
 
     this.updateScoreBox();
+    this.updateCurseBox();
     this.showMarquee(Marquees.START);
   },
 
@@ -447,6 +476,14 @@ var playState = {
   },
 
   update: function() {
+    if (game.global.newCurse) {
+      game.global.currentCurse = game.global.newCurse;
+      game.global.newCurse = null;
+      if (game.global.currentCurse == CurseType.BOARD_GROW) {
+        this.showMarquee(Marquees.CURSED_BOARD_GROW);
+      }
+      this.updateCurseBox();
+    }
   },
 
   playerDie: function() {
@@ -485,6 +522,20 @@ var playState = {
       }
       else {
         game.global.nextPiece.hide();
+      }
+      game.global.piecesUntilNextBoardGrowth = game.global.piecesUntilNextBoardGrowth - 1;
+      if (game.global.piecesUntilNextBoardGrowth <= 0) {
+        if (game.global.currentCurse == CurseType.BOARD_GROW) {
+          game.global.piecesUntilNextBoardGrowth = 10;
+          this.growBoard();
+        }
+      }
+
+      game.global.cursePieceCount = game.global.cursePieceCount + 1;
+      if (game.global.cursePieceCount > 10) {
+        game.global.cursePieceCount = 0;
+        game.global.currentCurse = null;
+        this.updateCurseBox();
       }
     }
   },

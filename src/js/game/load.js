@@ -41,6 +41,7 @@ var loadState = {
     game.load.image('marquee_buckle_up_title', 'assets/marquee_buckle_up_title.png');
     game.load.image('marquee_beware_title', 'assets/marquee_beware_title.png');
     game.load.image('marquee_beware_help', 'assets/marquee_beware_help.png');
+    game.load.image('marquee_cursed_title', 'assets/marquee_cursed_title.png');
 
     // Music
     game.load.audio('intro-music', ['assets/Hypnotic-Puzzle.mp3']);

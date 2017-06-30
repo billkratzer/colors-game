@@ -225,6 +225,16 @@ class GameBoard {
       }
     }
 
+    // Check to see if any of the matching blocks are black.
+    // If so, set a curse!
+    for (var block of matchingBlocks) {
+      if (block.type == GameBlockType.BLACK) {
+        game.global.newCurse = CurseType.random();
+        game.global.cursePieceCount = 0;
+        break;
+      }
+    }
+
     return this.explodeMatchingBlocks(matchingBlocks);
   }
 

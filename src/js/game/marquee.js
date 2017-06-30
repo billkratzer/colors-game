@@ -18,6 +18,13 @@ var Marquees = {
     help_text: 'Clearing black blocks will result in a curse!',
     help_sub_text: null,
     help_image_name: 'marquee_beware_help'
+  },
+
+  CURSED_BOARD_GROW:  {
+    title_image_name: 'marquee_cursed_title',
+    help_text: 'Watch out!  The board will start growing!',
+    help_sub_text: null,
+    help_image_name: null
   }
 
 };
