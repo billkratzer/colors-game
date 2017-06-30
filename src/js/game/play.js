@@ -174,8 +174,13 @@ var playState = {
 
     m.titleTween = game.add.tween(m.title).to({x: game.width/2}, 2000).easing(Phaser.Easing.Bounce.Out).start();
 
-    m.helpLabel = game.add.text(game.width / 2, game.height * .40, config.help_text, FontBuilder.build('25', '#bbb'));
+    m.helpLabel = game.add.text(game.width / 2, game.height * .35, config.help_text, FontBuilder.build('24', '#bbb'));
     m.helpLabel.anchor.setTo(0.5, 0.5);
+
+    if (config.help_sub_text) {
+      m.subHelpLabel = game.add.text(game.width / 2, game.height * .40, config.help_sub_text, FontBuilder.build('18', '#bbb'));
+      m.subHelpLabel.anchor.setTo(0.5, 0.5);
+    }
 
     m.helpImage = game.add.image(game.width / 2, game.height * .60, config.help_image_name);
     m.helpImage.anchor.setTo(0.5, 0.5);
@@ -214,6 +219,11 @@ var playState = {
     if (m.helpLabel) {
       m.helpLabel.destroy();
       m.helpLabel = null;
+    }
+
+    if (m.subHelpLabel) {
+      m.subHelpLabel.destroy();
+      m.subHelpLabel = null;
     }
 
     if (m.helpImage) {

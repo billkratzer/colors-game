@@ -22,8 +22,8 @@ var Marquees = {
 
   RAINBOW:  {
     title_image_name: 'marquee_rainbow_title',
-    help_text: 'Rainbow blocks will explode blocks when dropped',
-    help_sub_text: '(based on the color it lands on)',
+    help_text: 'Rainbow blocks will explode other blocks when dropped',
+    help_sub_text: '(based on the color upon which it lands)',
     help_image_name: 'marquee_rainbow_help'
   },
 
