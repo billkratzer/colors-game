@@ -12,13 +12,27 @@ var GameBlockType = {
     EXPLODING: {value: 100, char: '*', image: 'exploding_block'},
 
     random: function() {
-      return game.rnd.pick([
+      var type = game.rnd.pick([
         this.AQUA,
         this.BLUE,
         this.GREEN,
         this.PURPLE,
         this.RED
-      ])
+      ]);
+
+      return type;
+    },
+
+    normalRandom: function() {
+      var type = game.rnd.pick([
+        this.AQUA,
+        this.BLUE,
+        this.GREEN,
+        this.PURPLE,
+        this.RED
+      ]);
+
+      return type;
     }
 }
 

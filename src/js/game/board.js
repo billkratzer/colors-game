@@ -23,6 +23,38 @@ class GameBoard {
     }
   }
 
+  grow() {
+    // copy the rows up
+    for (var y = 1; y < this.height; y++) {
+      for (var x = 0; x < this.width; x++) {
+        this.board[x][y - 1] = this.board[x][y];
+        this.blocks[x][y - 1] = this.blocks[x][y];
+        var movedBlocked = this.blocks[x][y - 1];
+        if (movedBlocked) {
+          movedBlocked.setLogicalPosition(x, y - 1);
+        }
+      }
+    }
+
+    // fill in the bottom row
+    var y = this.height - 1;
+    for (var x = 0; x < this.width; x++) {
+      var type = GameBlockType.normalRandom();
+      this.board[x][y] = type;
+      var block = new GameBlock(type, x, y);
+      block.setOffset((game.width/2 - (32 * 9)/2), 18);
+      this.blocks[x][y] = block;
+    }
+  }
+
+  isTopRowEmpty() {
+    for (var x = 0; x < this.width; x++) {
+      if (!this.isEmpty(x, 0)) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   isEmpty(x, y) {
     return (this.board[x][y] == GameBlockType.EMPTY);

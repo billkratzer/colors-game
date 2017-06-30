@@ -209,7 +209,12 @@ var playState = {
 
 // The "T" key is simiply used to test things right now
   keyT: function() {
-    this.showMarquee();
+    var board = game.global.board;
+    if (!board.isTopRowEmpty()) {
+      this.playerDie();
+    }
+    board.grow();
+    this.lookForMatches();
     return;
     // game.camera.shake(0.08, 3000);
 
