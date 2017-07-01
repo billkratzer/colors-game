@@ -14,6 +14,8 @@ class GamePiece {
     this.y = 0;
 
     var blockType = GameBlockType.random();
+
+    // Make sure that we only have ONE rainbow block per piece!
     if (blockType == GameBlockType.RAINBOW) {
       this.rainbowCount++;
       if (this.rainbowCount > 1) {

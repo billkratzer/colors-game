@@ -48,6 +48,8 @@ var loadState = {
     game.load.image('marquee_diamonds_title', 'assets/marquee_diamonds_title.png');
     game.load.image('marquee_diamonds_help', 'assets/diamond.png');
 
+    // Misc
+    game.load.image('game_over', 'assets/game_over.png');
 
     // Music
     game.load.audio('intro-music', ['assets/Hypnotic-Puzzle.mp3']);

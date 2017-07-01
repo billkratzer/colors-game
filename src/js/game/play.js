@@ -204,6 +204,19 @@ var playState = {
       m.titleTween.update();
       m.helpTween.update();
     }
+
+    var gop = game.global.gameOverPanel;
+    if (gop) {
+      if (gop.titleTween) {
+        gop.titleTween.update();
+      }
+      if (gop.scoreTween) {
+        gop.scoreTween.update();
+      }
+      if (gop.highScoreTween) {
+        gop.highScoreTween.update();
+      }
+    }
   },
 
   hideMarquee: function() {
@@ -250,7 +263,7 @@ var playState = {
   growBoard: function() {
     var board = game.global.board;
     if (!board.isTopRowEmpty()) {
-      this.playerDie();
+      this.gameOver();
     }
     board.grow();
     this.lookForMatches();
@@ -307,7 +320,7 @@ var playState = {
     if (this.quitPanel) {
       game.paused = false;
       this.destroyQuitPanel();
-      this.playerDie();
+      this.gameOver();
     }
   },
 
@@ -492,8 +505,47 @@ var playState = {
     }
   },
 
-  playerDie: function() {
+  gameOver: function() {
     this.music.stop();
+
+    game.global.gameOverPanel = {};
+    var gop = game.global.gameOverPanel;
+
+    gop.graphics = game.add.graphics(0, 0);
+    gop.graphics.beginFill(0x000000, 0.85);
+    gop.graphics.drawRect(0, 0, game.width, game.height);
+    gop.graphics.endFill();
+
+    gop.title = game.add.image(game.width / 2, -300, 'game_over');
+    gop.title.anchor.x = 0.5;
+    gop.title.anchor.y = 0.5;
+
+    gop.titleTween = game.add.tween(gop.title).to({y: game.height * 0.20}, 2000).easing(Phaser.Easing.Bounce.Out).start();
+
+    gop.scoreLabel = game.add.text(0 - game.width / 2, game.height * .40, 'Your Score:  ' + game.global.score, FontBuilder.build('32', '#eee'));
+    gop.scoreLabel.anchor.setTo(0.5, 0.5);
+    gop.scoreTween = game.add.tween(gop.scoreLabel).to({x: game.width / 2}, 500).easing(Phaser.Easing.Linear.None).start();
+
+    gop.highScoreLabel = game.add.text(game.width + game.width / 2, game.height * .50, 'High Score:  ' + HighScore.get(), FontBuilder.build('24', '#999'));
+    gop.highScoreLabel.anchor.setTo(0.5, 0.5);
+    gop.highScoreTween = game.add.tween(gop.highScoreLabel).to({x: game.width / 2}, 500).easing(Phaser.Easing.Linear.None).start();
+
+    if (game.global.score > HighScore.get()) {
+        HighScore.set(game.global.score);
+        gop.congratulationsLabel = game.add.text(game.width / 2, game.height * .60, 'Congratulations!  You have a new High Score!', FontBuilder.build('24', '#fff'));
+        gop.congratulationsLabel.anchor.setTo(0.5, 0.5);
+    }
+
+    gop.pressLabel = game.add.text(game.width / 2, game.height * .90, 'Press Space Bar to Continue', { font: '32px Exo 2', fill: '#eee' });
+    gop.pressLabel.anchor.setTo(0.5, 0.5);
+
+    game.paused = true;
+    game.input.keyboard.reset(true);
+    game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.add(this.goToMenu, this);
+  },
+
+  goToMenu: function() {
+    game.paused = false;
     game.state.start('menu');
   },
 
@@ -522,7 +574,7 @@ var playState = {
     var gg = game.global;
     var newPiece = gg.nextPiece;
     if (gg.board.collides(newPiece, 0,0)) {
-      this.playerDie();
+      this.gameOver();
     }
     else {
       gg.currentPiece = newPiece;
@@ -560,6 +612,6 @@ var playState = {
   },
 
   calcPoints: function(numberOfBlocks, collapseCycle) {
-      return game.global.level * numberOfBlocks * collapseCycle;
+      return game.global.level * numberOfBlocks * (collapseCycle + 1);
   }
 }
