@@ -12,7 +12,7 @@ var Marquees = {
     help_text: 'Things are going to get a little faster!',
     help_sub_text: null,
     help_image_name: null,
-    help_image_scale: 0.5
+    help_image_scale: 1.0
   },
 
   BEWARE:  {
@@ -20,7 +20,7 @@ var Marquees = {
     help_text: 'Clearing black blocks will result in a curse!',
     help_sub_text: null,
     help_image_name: 'marquee_beware_help',
-    help_image_scale: 0.5
+    help_image_scale: 1.0
   },
 
   RAINBOW:  {
@@ -28,7 +28,7 @@ var Marquees = {
     help_text: 'Rainbow blocks will explode other blocks when dropped',
     help_sub_text: '(based on the color upon which it lands)',
     help_image_name: 'marquee_rainbow_help',
-    help_image_scale: 0.5
+    help_image_scale: 1.0
   },
 
   DIAMONDS:  {
@@ -44,7 +44,7 @@ var Marquees = {
     help_text: 'Watch out!  The board will start growing!',
     help_sub_text: null,
     help_image_name: null,
-    help_image_scale: 0.5
+    help_image_scale: 1.0
   }
 
 };
