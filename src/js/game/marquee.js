@@ -4,7 +4,7 @@ var Marquees = {
     help_text: 'Line up three similar colors in a row to score points!',
     help_sub_text: null,
     help_image_name: 'marquee_easy_peasy_help',
-    help_image_scale: 0.5
+    help_image_scale: 1.0
   },
 
   BUCKLE_UP:  {
