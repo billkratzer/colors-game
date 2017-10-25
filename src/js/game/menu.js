@@ -78,12 +78,18 @@ var menuState = {
     highScoreLabel.anchor.setTo(0.5, 0.5);
     this.tweenTint(highScoreLabel, Phaser.Color.getColor(0,204,204), Phaser.Color.getColor(0,255,255), 2000);
 
-    var startLabel = game.add.text(game.width/2, game.height - 80,
+    var startLabel = game.add.text(game.width/2, game.height - 100,
       'Press the Space Bar to Start!',
       FontBuilder.build('25', '#fff')
     );
     startLabel.anchor.setTo(0.5, 0.5);
     game.add.tween(startLabel).to({angle: -1}, 500).to({angle: 1}, 1000).to({angle: 0}, 500).loop().start();
+
+    var versionLabel = game.add.text(game.width - 38, game.height - 36,
+      'Version ' + game.VERSION,
+      FontBuilder.build('16', '#aaa')
+    );
+    versionLabel.anchor.setTo(1, 1);
 
     var spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     spaceKey.onDown.add(this.start, this);
