@@ -9,6 +9,11 @@ var bootState = {
     game.physics.startSystem(Phaser.Physics.ARCADE);
     game.renderer.renderSession.roundPixels = false;
 
+    game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    //game.scale.scaleMode = Phaser.ScaleManager.NO_SCALE;
+    game.scale.pageAlignVertically = true;
+    game.scale.pageAlignHorizontally = true;
+
     document.body.style.backgroundColor = '#000';
   },
 
