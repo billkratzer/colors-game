@@ -2,28 +2,25 @@ var GameSpeed = {
 
     speeds: [
       1000,   // Level 1
-       800,   // Level 2
-       600,   // Level 3
-       400,   // Level 4
-      5000,   // Level 5
-      1000,   // Level 6
-      1000,   // Level 7
-      1000,   // Level 8
-      1000,   // Level 9
-       900,   // Level 10
-       800,   // Level 11
-       700,   // Level 12
-       600,   // Level 13
-       500,   // Level 14
-       500,   // Level 15
+      800,   // Level 2
+      900,   // Level 3
+      700,   // Level 4
+      800,   // Level 5
+      700,   // Level 6
+      800,   // Level 7
     ],
 
     getSpeedForLevel: function(level) {
-      if (level <= 15) {
+      
+      if (level <= this.speeds.length) {
         return this.speeds[level - 1];
       }
       else {
-        return 400;
+        // when we stop using the pre determined speeds, 
+        // each level increases the speed by 30 until it hits 30
+        // at about lv 33 will it reach max speed
+        let maxSpd = 800-((level-this.speeds.length)*30);
+        return (maxSpd<30)?30:maxSpd
       }
     }
 

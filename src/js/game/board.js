@@ -208,6 +208,10 @@ class GameBoard {
   }
 
   findMatches() {
+    var matchAmount=3;
+    if (game.global.currentCurse!=null && game.global.currentCurse == CurseType.HARDER_MATCHES) {
+      matchAmount=4;
+    }
     var matchingBlocks = [];
 
     // Are there any rainbox pieces?  (if so, consider anything beneath a rainbow block a match)
@@ -229,25 +233,25 @@ class GameBoard {
         }
         // Search Down
         var count = this.countInARow(x, y, 0, 1);
-        if (count >= 3) {
+        if (count >= matchAmount) {
           matchingBlocks.push.apply(matchingBlocks, this.getRunOfBlocks(x, y, 0, 1, count));
         }
 
         // Search Right
         count = this.countInARow(x, y, 1, 0);
-        if (count >= 3) {
+        if (count >= matchAmount) {
           matchingBlocks.push.apply(matchingBlocks, this.getRunOfBlocks(x, y, 1, 0, count));
         }
 
         // Search Right/Down
         count = this.countInARow(x, y, 1, -1);
-        if (count >= 3) {
+        if (count >= matchAmount) {
           matchingBlocks.push.apply(matchingBlocks, this.getRunOfBlocks(x, y, 1, -1, count));
         }
 
         // Search Right/Up
         count = this.countInARow(x, y, 1, 1);
-        if (count >= 3) {
+        if (count >= matchAmount) {
           matchingBlocks.push.apply(matchingBlocks, this.getRunOfBlocks(x, y, 1, 1, count));
         }
       }

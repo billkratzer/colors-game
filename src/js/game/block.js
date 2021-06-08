@@ -1,12 +1,19 @@
 var GameBlockType = {
     EMPTY:     {value: 0,   char: '.', image: ''},
     AQUA:      {value: 1,   char: 'A', image: 'aqua_block'},
+    AQUA2:      {value: 101,   char: 'AA', image: 'aqua2_block'},
     BLUE:      {value: 2,   char: 'B', image: 'blue_block'},
+    BLUE2:      {value: 102,   char: 'BB', image: 'blue2_block'},
     GREEN:     {value: 3,   char: 'G', image: 'green_block'},
+    GREEN2:     {value: 103,   char: 'GG', image: 'green2_block'},
     PURPLE:    {value: 4,   char: 'P', image: 'purple_block'},
+    PURPLE2:    {value: 104,   char: 'PP', image: 'purple2_block'},
     RED:       {value: 5,   char: 'R', image: 'red_block'},
+    RED2:       {value: 105,   char: 'RR', image: 'red2_block'},
     ORANGE:    {value: 6,   char: 'O', image: 'orange_block'},
+    ORANGE2:    {value: 106,   char: 'OO', image: 'orange2_block'},
     YELLOW:    {value: 7,   char: 'Y', image: 'yellow_block'},
+    YELLOW2:    {value: 107,   char: 'YY', image: 'yellow2_block'},
     RAINBOW:   {value: 10,  char: 'r', image: 'rainbow_block'},
     BLACK:     {value: 11,  char: 'r', image: 'black_block'},
     DIAMOND:   {value: 12,  char: 'r', image: 'diamond'},
@@ -14,28 +21,38 @@ var GameBlockType = {
 
     random: function() {
       var type = this.normalRandom();
-
-      // Rainbox Blocks start appearing at level 2
-      if ((game.global) && (game.global.level >= 2)) {
-        if (game.rnd.frac() < 0.10) {
-          return this.RAINBOW;
+      //Added in all these checks because global may not always 
+      //exist at the start of the game.
+      if (game!=undefined ) {
+        if(game.global!=undefined){
+          if(game.global.currentCurse!=null && game.global.currentCurse == CurseType.CURSED_COLORS){
+            
+            type = this.cursedRandom();
+          }
         }
       }
-
-      // Rainbox Blocks start appearing at level 4
-      if ((game.global) && (game.global.level >= 4)) {
+      
+      // Diamond Blocks start appearing at level 2
+      if ((game.global) && (game.global.level >= 2)) {
         if (game.rnd.frac() < 0.10) {
           return this.DIAMOND;
         }
       }
 
-      // Black Blocks start appearing at level 5
-      if ((game.global) && (game.global.level >= 5)) {
+      // Black Blocks start appearing at level 4
+      if ((game.global) && (game.global.level >= 4)) {
         if (game.rnd.frac() < 0.10) {
           return this.BLACK;
         }
       }
 
+      // Rainbox Blocks start appearing at level 6
+      if ((game.global) && (game.global.level >= 6)) {
+        if (game.rnd.frac() < 0.05) {
+          return this.RAINBOW;
+        }
+      }
+      
       return type;
     },
 
@@ -46,6 +63,20 @@ var GameBlockType = {
         this.GREEN,
         this.PURPLE,
         this.RED
+      ]);
+    },
+    cursedRandom: function() {
+      return game.rnd.pick([
+        // this.AQUA,
+        // this.BLUE,
+        // this.GREEN,
+        // this.PURPLE,
+        // this.RED,
+        this.AQUA2,
+        this.BLUE2,
+        this.GREEN2,
+        this.PURPLE2,
+        this.RED2,
       ]);
     }
 }

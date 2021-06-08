@@ -386,7 +386,7 @@ var playState = {
 
   },
 
-  keyLeft: function() {
+  moveLeft:function(){
     console.log("Left");
     var piece = game.global.currentPiece;
     var board = game.global.board;
@@ -398,10 +398,9 @@ var playState = {
       return;
     }
 
-    piece.moveLeft();
+      piece.moveLeft();
   },
-
-  keyRight: function() {
+  moveRight: function() {
     console.log("Right");
     var piece = game.global.currentPiece;
     var board = game.global.board;
@@ -412,7 +411,25 @@ var playState = {
     if (board.collides(piece, 1, 0)) {
       return;
     }
-    piece.moveRight();
+      piece.moveRight();
+  },
+
+  keyLeft: function() {
+    if(game.global.currentCurse==CurseType.REVERSE_KEYS){
+      this.moveRight();
+    }
+    else{
+      this.moveLeft();
+    }
+  },
+  
+  keyRight: function() {
+    if(game.global.currentCurse==CurseType.REVERSE_KEYS){
+      this.moveLeft();
+    }
+    else{
+      this.moveRight();
+    }
   },
 
   keyUp: function() {
@@ -498,8 +515,17 @@ var playState = {
     if (game.global.newCurse) {
       game.global.currentCurse = game.global.newCurse;
       game.global.newCurse = null;
-      if (game.global.currentCurse == CurseType.BOARD_GROW) {
+      if (game.global.currentCurse!=null && game.global.currentCurse == CurseType.BOARD_GROW) {
         this.showMarquee(Marquees.CURSED_BOARD_GROW);
+      }
+      if (game.global.currentCurse!=null && game.global.currentCurse == CurseType.CURSED_COLORS) {
+        this.showMarquee(Marquees.CURSED_COLORS);
+      }
+      if (game.global.currentCurse!=null && game.global.currentCurse == CurseType.REVERSE_KEYS) {
+        this.showMarquee(Marquees.REVERSE_KEYS);
+      }
+      if (game.global.currentCurse!=null && game.global.currentCurse == CurseType.HARDER_MATCHES) {
+        this.showMarquee(Marquees.HARDER_MATCHES);
       }
       this.updateCurseBox();
     }
@@ -556,17 +582,17 @@ var playState = {
 
     this.initPieceTimer();
 
-    if (game.global.level == 2) {
-      //this.showMarquee(Marquees.BUCKLE_UP);
-      this.showMarquee(Marquees.RAINBOW);
-    }
 
-    if (game.global.level == 4) {
+    if (game.global.level == 2) {
       this.showMarquee(Marquees.DIAMONDS);
     }
 
-    if (game.global.level == 5) {
+    if (game.global.level == 4) {
       this.showMarquee(Marquees.BEWARE);
+    }
+    
+    if (game.global.level == 6) {
+      this.showMarquee(Marquees.RAINBOW);
     }
   },
 

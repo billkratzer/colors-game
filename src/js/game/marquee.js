@@ -34,7 +34,7 @@ var Marquees = {
   DIAMONDS:  {
     title_image_name: 'marquee_diamonds_title',
     help_text: 'Diamonds are forever!',
-    help_sub_text: 'Diamonds do not match and clear.  But rainbow blocks can destory them!',
+    help_sub_text: 'Diamonds do not match and clear. But there may be a way to destory them!',
     help_image_name: 'marquee_diamonds_help',
     help_image_scale: 2
   },
@@ -42,6 +42,27 @@ var Marquees = {
   CURSED_BOARD_GROW:  {
     title_image_name: 'marquee_cursed_title',
     help_text: 'Watch out!  The board will start growing!',
+    help_sub_text: null,
+    help_image_name: null,
+    help_image_scale: 1.0
+  },
+  CURSED_COLORS:  {
+    title_image_name: 'marquee_cursed_title',
+    help_text: 'Cursed colors will begin to appear',
+    help_sub_text: null,
+    help_image_name: null,
+    help_image_scale: 1.0
+  },
+  REVERSE_KEYS:  {
+    title_image_name: 'marquee_cursed_title',
+    help_text: 'Go left... no the other left',
+    help_sub_text: null,
+    help_image_name: null,
+    help_image_scale: 1.0
+  },
+  HARDER_MATCHES:  {
+    title_image_name: 'marquee_cursed_title',
+    help_text: 'Not quite tetris, you must now match 4',
     help_sub_text: null,
     help_image_name: null,
     help_image_scale: 1.0
