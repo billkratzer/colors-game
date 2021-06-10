@@ -21,6 +21,15 @@ var loadState = {
     game.load.image('red_block', 'assets/red_block.png');
     game.load.image('orange_block', 'assets/orange_block.png');
     game.load.image('yellow_block', 'assets/yellow_block.png');
+
+    game.load.image('aqua2_block', 'assets/aqua2_block.png');
+    game.load.image('blue2_block', 'assets/blue2_block.png');
+    game.load.image('green2_block', 'assets/green2_block.png');
+    game.load.image('purple2_block', 'assets/purple2_block.png');
+    game.load.image('red2_block', 'assets/red2_block.png');
+    game.load.image('orange2_block', 'assets/orange2_block.png');
+    game.load.image('yellow2_block', 'assets/yellow2_block.png');
+    
     game.load.image('black_block', 'assets/black_block.png');
     game.load.image('rainbow_block', 'assets/rainbow_block.png');
     game.load.image('diamond', 'assets/diamond.png');

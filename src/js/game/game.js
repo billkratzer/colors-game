@@ -1,6 +1,6 @@
 var game = new Phaser.Game(800, 640, 'AUTO', 'game');
 
-game.VERSION = '0.9.2';
+game.VERSION = '0.9.3';
 
 game.state.add('boot', bootState);
 game.state.add('load', loadState);
